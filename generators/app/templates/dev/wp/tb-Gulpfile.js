@@ -20,6 +20,7 @@ var gulp = require('gulp'),
 	autoprefixer = require('gulp-autoprefixer');
 	rename = require("gulp-rename");
 	reload = browserSync.reload,
+	gcmq = require('gulp-group-css-media-queries');
 	src = './src',
 	dist = './dist',
 	tbPath = './bower_components/bootstrap-sass/assets',
@@ -64,6 +65,7 @@ gulp.task('sass', function(){
 			sourcemap: false,
 			errLogToConsole: true
 		}))
+        .pipe(gcmq())
 	    .pipe(autoprefixer({
 	        browsers: ['last 12 versions'],
 	        cascade: false
@@ -84,6 +86,7 @@ gulp.task('sass-tb', function(){
 			sourcemap: false,
 			errLogToConsole: true
 		}))
+        .pipe(gcmq())
 	    .pipe(autoprefixer({
 	        browsers: ['last 4 versions'],
 	        cascade: false

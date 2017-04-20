@@ -21,6 +21,7 @@ var gulp = require('gulp'),
 	path = require('path');
 	autoprefixer = require('gulp-autoprefixer');
 	reload = browserSync.reload,
+	gcmq = require('gulp-group-css-media-queries');
 	src = './src',
 	dist = './dist',
 	config = {
@@ -53,6 +54,7 @@ gulp.task('less', function(){
         browsers: ['last 4 versions'],
         cascade: false
     }))
+    .pipe(gcmq())
 	.pipe(uglifycss({
 		"maxLineLen": 1,
 		"uglyComments": true

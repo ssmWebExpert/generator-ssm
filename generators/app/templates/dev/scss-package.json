@@ -18,6 +18,7 @@
     "gulp-uglify": "^2.1.1",
     "gulp-uglifycss": "^1.0.7",
     "gulp-autoprefixer": "^3.1.0",
+    "gulp-group-css-media-queries": "1.2.0",
     "jstransformer-escape-html": "^1.0.0",
     "jstransformer-markdown-it": "^2.0.0"
   }

@@ -22,6 +22,7 @@ var gulp = require('gulp'),
 	less = require('gulp-less');
 	path = require('path');
 	reload = browserSync.reload,
+	gcmq = require('gulp-group-css-media-queries');
 	src = './src',
 	dist = './dist',
 	tbPath = './bower_components/bootstrap',
@@ -60,6 +61,7 @@ gulp.task('less', function(){
 	        browsers: ['last 4 versions'],
 	        cascade: false
 	    }))
+        .pipe(gcmq())
 		.pipe(uglifycss({
 			"maxLineLen": 1,
 			"uglyComments": true
@@ -76,6 +78,7 @@ gulp.task('less-tb', function(){
 	        browsers: ['last 4 versions'],
 	        cascade: false
 	    }))
+        .pipe(gcmq())
 		.pipe(uglifycss({
 			"maxLineLen": 1,
 			"uglyComments": true

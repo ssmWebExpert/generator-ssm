@@ -1,7 +1,10 @@
 # generator-ssm [![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url]
 > Generator based on Bootstrap framework, pug and gulp
+
 > On your choice:
+
 > sass/less preprocessors;
+
 > Bootstrap sass/less framework based.
 
 ## Installation
@@ -26,8 +29,11 @@ cd markup
 gulp serve
 ```
 > If you've find some issues - please contact me:
+
 > saintick.mail@gmail.com - email
+
 > deadkedbl2 - skype
+
 > https://www.linkedin.com/in/anton-pavlusenko-950b46b3 - linkedin
 
 ## Getting To Know Yeoman

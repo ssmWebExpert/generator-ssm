@@ -1,11 +1,11 @@
 # generator-ssm [![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url]
-> Generator based on Bootstrap framework, pug and gulp
+ Generator based on Bootstrap framework, pug and gulp
 
-> On your choice:
+ On your choice:
 
-> sass/less preprocessors;
+ sass/less preprocessors;
 
-> Bootstrap sass/less framework based.
+ Bootstrap sass/less framework based.
 
 ## Installation
 
@@ -28,13 +28,13 @@ After that you need to enter new catalogue and start gulp:
 cd markup
 gulp serve
 ```
-> If you've find some issues - please contact me:
+ If you've find some issues - please contact me:
 
-> saintick.mail@gmail.com - email
+ saintick.mail@gmail.com - email
 
-> deadkedbl2 - skype
+ deadkedbl2 - skype
 
-> https://www.linkedin.com/in/anton-pavlusenko-950b46b3 - linkedin
+ https://www.linkedin.com/in/anton-pavlusenko-950b46b3 - linkedin
 
 ## Getting To Know Yeoman
 

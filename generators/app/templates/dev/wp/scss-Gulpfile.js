@@ -72,7 +72,8 @@ gulp.task('pug', function buildHTML() {
 		.pipe(pug({
 			pretty: true
 		}))
-		.pipe(gulp.dest(dist));
+		.pipe(gulp.dest(dist))
+		.pipe(browserSync.stream());
 });
 
 /* Run a proxy server
@@ -138,7 +139,7 @@ gulp.task('build', ['clean'], function(){
 
 gulp.task('serve', ['build', 'browser-sync'], function(){
   gulp.watch(config.cssPath + '/*.css').on('change', browserSync.reload);
-  gulp.watch(src + '/*.pug', ['pug']).on('change', browserSync.reload);
+  gulp.watch(src + '/*.pug', ['pug']);
   gulp.watch(dist + '/*.html').on('change', browserSync.reload);
     gulp.watch('src/images/**/*', ['copyImage']);
   gulp.watch(config.scssPath + '/**/*.scss', ['sass']).on('change', browserSync.reload);

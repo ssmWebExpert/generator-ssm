@@ -22,12 +22,13 @@ Then generate your new project:
 yo ssm
 ```
 
-After that you need to enter new catalogue and start gulp:
+After that you need to start gulp bat/app to enter workflow catalogue or make it using console:
 
 ```bash
 cd markup
 gulp serve
 ```
+
  If you've find some issues - please contact me:
 
  saintick.mail@gmail.com - email

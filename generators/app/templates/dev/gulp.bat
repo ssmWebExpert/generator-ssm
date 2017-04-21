@@ -1,0 +1,2 @@
+cd markup
+gulp serve

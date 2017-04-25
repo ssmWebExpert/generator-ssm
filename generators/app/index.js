@@ -95,8 +95,8 @@ module.exports = class extends Generator {
       );
       if(this.data.operationSystem == 'IOs') {
         this.fs.copy(
-          this.templatePath('dev/gulp.app'),
-          this.destinationPath(this.data.appName + '/gulp-start.app')
+          this.templatePath('dev/gulp-start.app'),
+          this.destinationPath(this.data.appName + '/gulp.app')
         );
       }
       else {

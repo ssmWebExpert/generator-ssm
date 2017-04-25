@@ -20,6 +20,7 @@ var gulp = require('gulp'),
 	autoprefixer = require('gulp-autoprefixer');
 	reload = browserSync.reload,
 	gcmq = require('gulp-group-css-media-queries');
+	copyhtml = require('ionic-gulp-html-copy');
 	src = './src',
 	dist = './dist',
 	config = {
@@ -74,6 +75,14 @@ gulp.task('pug', function buildHTML() {
 			pretty: true
 		}))
 		.pipe(gulp.dest(dist))
+		.pipe(browserSync.stream());
+});
+
+gulp.task('html', function() {
+	return copyhtml({
+			src: src + '/*.html',
+			dest: dist
+		})
 		.pipe(browserSync.stream());
 });
 
@@ -132,6 +141,7 @@ gulp.task('uglify', function () {
 
 gulp.task('build', ['clean'], function(){
   gulp.start('pug');
+  gulp.start('html');
   gulp.start('sass');
   gulp.start('copy');
   gulp.start('images');
@@ -141,6 +151,7 @@ gulp.task('build', ['clean'], function(){
 gulp.task('serve', ['build', 'browser-sync'], function(){
   gulp.watch(config.cssPath + '/*.css').on('change', browserSync.reload);
   gulp.watch(src + '/*.pug', ['pug']);
+  gulp.watch(src + '/*.html', ['html']);
   gulp.watch(dist + '/*.html').on('change', browserSync.reload);
     gulp.watch('src/images/**/*', ['copyImage']);
   gulp.watch(config.scssPath + '/**/*.scss', ['sass']).on('change', browserSync.reload);

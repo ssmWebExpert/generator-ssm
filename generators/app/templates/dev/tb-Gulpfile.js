@@ -7,13 +7,11 @@
 const gulp = require('gulp'),
 	browserSync = require('browser-sync').create(),
 	$ = require('gulp-load-plugins')();
-	pkg = require('./package.json');
 	run = require('run-sequence');
 	src = './src',
 	dist = './dist',
 	tbPath = './bower_components/bootstrap-sass/assets',
 	config = {
-		htmlPath: dist,
 		scssPath: src + '/scss',
 		cssPath: dist + '/css',
 		jsPathSrc: src + '/js',
@@ -23,15 +21,14 @@ const gulp = require('gulp'),
 		pathFonts: src + '/fonts',
 		destFonts: dist + '/fonts',
 		tbPathSass: tbPath + '/stylesheets',
-		tbPathJs: tbPath + '/javascripts',
-		imgPathDest: dist
+		tbPathJs: tbPath + '/javascripts'
 	};
 
 console.log($);
 gulp.task('images', function(){
     gulp.src([config.imgPathSrc + '**/*'])
         .pipe($.imagemin({verbose: true}))
-        .pipe(gulp.dest(config.imgPathDest));
+        .pipe(gulp.dest(dist));
 });
 
 /**********************************************************************
@@ -49,7 +46,7 @@ gulp.task('rename', function(){
 
 gulp.task('sass', function(){
 	return gulp.src(config.scssPath + '/**/*.scss')
-		.pipe($.newer(config.cssPath + '/css'))
+		.pipe($.newer(config.cssPath))
 		.pipe($.sass({
 			style: 'extended',
 			sourcemap: false,
@@ -70,7 +67,7 @@ gulp.task('sass', function(){
 
 gulp.task('sass-tb', function(){
 	return gulp.src(config.tbPathSass + '/**/*.scss')
-		.pipe($.newer(config.cssPath + '/css'))
+		.pipe($.newer(config.cssPath))
 		.pipe($.sass({
 			style: 'extended',
 			sourcemap: false,
@@ -143,7 +140,7 @@ gulp.task('copy', function(){
 		config.tbPathFonts + '/**/*.*'
 	])
 	.pipe($.contribCopy())
-	.pipe(gulp.dest(dist + '/fonts'));
+	.pipe(gulp.dest(config.destFonts));
 	gulp.src([
 		config.tbPathJs + '/bootstrap.min.js'
 	])

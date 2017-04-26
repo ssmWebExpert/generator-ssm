@@ -5,7 +5,6 @@
   "version": "1.0.0",
   "main": "Gulpfile.js",
   "devDependencies": {
-    "browser-sync": "^2.2.1",
     "gulp": "^3.8.11",
     "gulp-contrib-clean": "^0.0.2",
     "gulp-contrib-copy": "^0.1.2",
@@ -20,8 +19,7 @@
     "gulp-uglifycss": "^1.0.7",
     "jstransformer-escape-html": "^1.0.0",
     "jstransformer-markdown-it": "^2.0.0",
-    "gulp-group-css-media-queries": "1.2.0",
-    "ionic-gulp-html-copy": "^1.0.0",
+    "gulp-group-css-media-queries": "^1.1.0",
     "gulp-rename": "^1.0.0"
   }
 }

@@ -116,6 +116,10 @@ module.exports = class extends Generator {
             this.destinationPath(this.data.appName + '/markup/package.json')
           );
           this.fs.copy(
+            this.templatePath('dev/bower.json'),
+            this.destinationPath(this.data.appName + '/markup/bower.json')
+          );
+          this.fs.copy(
             this.templatePath('dev/scss'),
             this.destinationPath(this.data.appName + '/markup/src/scss')
           );
@@ -128,6 +132,10 @@ module.exports = class extends Generator {
           this.fs.copy(
             this.templatePath('dev/less-package.json'),
             this.destinationPath(this.data.appName + '/markup/package.json')
+          );
+          this.fs.copy(
+            this.templatePath('dev/bower.json'),
+            this.destinationPath(this.data.appName + '/markup/bower.json')
           );
           this.fs.copy(
             this.templatePath('dev/less'),
@@ -186,8 +194,12 @@ module.exports = class extends Generator {
             this.destinationPath(this.data.appName + '/markup/gulpfile.js')
           );
           this.fs.copy(
-            this.templatePath('dev/wp/scss-package.json'),
+            this.templatePath('dev/scss-package.json'),
             this.destinationPath(this.data.appName + '/markup/package.json')
+          );
+          this.fs.copy(
+            this.templatePath('dev/bower.json'),
+            this.destinationPath(this.data.appName + '/markup/bower.json')
           );
           this.fs.copy(
             this.templatePath('dev/scss'),
@@ -204,8 +216,12 @@ module.exports = class extends Generator {
             this.destinationPath(this.data.appName + '/markup/gulpfile.js')
           );
           this.fs.copy(
-            this.templatePath('dev/wp/less-package.json'),
+            this.templatePath('dev/less-package.json'),
             this.destinationPath(this.data.appName + '/markup/package.json')
+          );
+          this.fs.copy(
+            this.templatePath('dev/bower.json'),
+            this.destinationPath(this.data.appName + '/markup/bower.json')
           );
           this.fs.copy(
             this.templatePath('dev/less'),
@@ -222,11 +238,11 @@ module.exports = class extends Generator {
             this.destinationPath(this.data.appName + '/markup/gulpfile.js')
           );
           this.fs.copy(
-            this.templatePath('dev/wp/tb-package.json'),
+            this.templatePath('dev/tb-package.json'),
             this.destinationPath(this.data.appName + '/markup/package.json')
           );
           this.fs.copy(
-            this.templatePath('dev/wp/tb-bower.json'),
+            this.templatePath('dev/tb-bower.json'),
             this.destinationPath(this.data.appName + '/markup/bower.json')
           );
           this.fs.copy(
@@ -244,11 +260,11 @@ module.exports = class extends Generator {
             this.destinationPath(this.data.appName + '/markup/gulpfile.js')
           );
           this.fs.copy(
-            this.templatePath('dev/wp/tb-less-package.json'),
+            this.templatePath('dev/tb-less-package.json'),
             this.destinationPath(this.data.appName + '/markup/package.json')
           );
           this.fs.copy(
-            this.templatePath('dev/wp/tb-less-bower.json'),
+            this.templatePath('dev/tb-less-bower.json'),
             this.destinationPath(this.data.appName + '/markup/bower.json')
           );
           this.fs.copy(
@@ -265,24 +281,9 @@ module.exports = class extends Generator {
 
     install() {
       process.chdir(this.data.appName + '/markup');
-      if(this.data.framework == "sass" || this.data.framework == "less") {
-        this.installDependencies({
-          bower: false,
-          npm: true
-        });
-      }
-      else if(this.data.framework == "bootstrap-less" || this.data.framework == "bootstrap") {
-        this.installDependencies({
-          bower: true,
-          npm: true
-        });
-      }
+      this.installDependencies({
+        bower: true,
+        npm: true
+      });
     };
-
-    // end() {
-    //   var sys = require('util'),
-    //       exec = require('child_process').exec,
-    //       addr = "cd" + this.data.appName;
-    //     exec("gulp serve", function(err, stdout, stderr) {})
-    // };
 };

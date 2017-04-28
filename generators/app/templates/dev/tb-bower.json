@@ -2,14 +2,20 @@
   "name": "ssm",
   "private": true,
   "dependencies": {
+    "normalize-css": "~6.0.0",
     "bootstrap-sass": "~3.3.5"
   },
   "overrides": {
     "bootstrap-sass": {
       "main": [
-        "assets/fonts/bootstrap/*",
-        "assets/javascripts/bootstrap.js"
-      ]
+        "assets/stylesheets/bootstrap/*",
+        "assets/javascripts/bootstrap.min.js"
+      ],
+      "dependencies": {}
+    },
+    "jQuery": {
+      "main":
+        "dist/jquery.min.js"
     }
   }
 }

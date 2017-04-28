@@ -2,18 +2,12 @@
   "name": "ssm",
   "private": true,
   "dependencies": {
-    "bootstrap": "~3.3.5"
+    "jQuery": "~1.12.4"
   },
   "overrides": {
     "jQuery": {
       "main":
         "dist/jquery.min.js"
-    },
-    "bootstrap": {
-      "main": [
-        "dist/fonts/bootstrap/*",
-        "dist/js/bootstrap.min.js"
-      ]
     }
   }
 }

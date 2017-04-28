@@ -7,11 +7,14 @@
 const gulp = require('gulp'),
 	browserSync = require('browser-sync').create(),
 	$ = require('gulp-load-plugins')();
+	pkg = require('./package.json');
 	run = require('run-sequence');
+	wiredep = require('wiredep').stream;
 	src = './src',
 	dist = './dist',
 	tbPath = './bower_components/bootstrap-sass/assets',
 	config = {
+		htmlPath: dist,
 		scssPath: src + '/scss',
 		cssPath: dist + '/css',
 		jsPathSrc: src + '/js',
@@ -21,14 +24,15 @@ const gulp = require('gulp'),
 		pathFonts: src + '/fonts',
 		destFonts: dist + '/fonts',
 		tbPathSass: tbPath + '/stylesheets',
-		tbPathJs: tbPath + '/javascripts'
+		tbPathJs: tbPath + '/javascripts',
+		imgPathDest: dist
 	};
 
 console.log($);
 gulp.task('images', function(){
     gulp.src([config.imgPathSrc + '**/*'])
         .pipe($.imagemin({verbose: true}))
-        .pipe(gulp.dest(dist));
+        .pipe(gulp.dest(config.imgPathDest));
 });
 
 /**********************************************************************
@@ -58,7 +62,7 @@ gulp.task('sass', function(){
 	    }))
         .pipe($.groupCssMediaQueries())
 		.pipe($.uglifycss({
-			"maxLineLen": 1,
+			"maxLineLen": 80,
 			"uglyComments": false
 		}))
 		.pipe(gulp.dest(config.cssPath))
@@ -79,7 +83,7 @@ gulp.task('sass-tb', function(){
 	    }))
         .pipe($.groupCssMediaQueries())
 		.pipe($.uglifycss({
-			"maxLineLen": 1,
+			"maxLineLen": 80,
 			"uglyComments": false
 		}))
 		.pipe(gulp.dest(config.cssPath));
@@ -93,6 +97,13 @@ gulp.task('pug', function buildHTML() {
 		.pipe($.pug({
 			pretty: true
 		}))
+    	.pipe(wiredep())
+    	.pipe($.useref())
+    	.pipe($.if('*.js', $.uglify()))
+        .pipe($.if('*.css', $.uglifycss({
+			"maxLineLen": 80,
+			"uglyComments": false
+		})))
 		.pipe(gulp.dest(dist))
 		.pipe(browserSync.stream());
 });
@@ -126,6 +137,13 @@ gulp.task('clean', function(){
 gulp.task('html', function() {
 	return gulp.src(src + '/*.html')
 		.pipe($.contribCopy())
+    	.pipe(wiredep())
+    	.pipe($.useref())
+    	.pipe($.if('*.js', $.uglify()))
+        .pipe($.if('*.css', $.uglifycss({
+			"maxLineLen": 80,
+			"uglyComments": false
+		})))
 		.pipe(gulp.dest(dist))
 		.pipe(browserSync.stream());
 });
@@ -140,7 +158,7 @@ gulp.task('copy', function(){
 		config.tbPathFonts + '/**/*.*'
 	])
 	.pipe($.contribCopy())
-	.pipe(gulp.dest(config.destFonts));
+	.pipe(gulp.dest(dist + '/fonts'));
 	gulp.src([
 		config.tbPathJs + '/bootstrap.min.js'
 	])
@@ -178,9 +196,11 @@ gulp.task('uglify', function () {
 gulp.task('build', function(){
   run(
   	'clean',
-	['pug', 'html'],
+	'pug',
+	'html',
 	'rename',
-	['sass', 'sass-tb'],
+	'sass',
+	'sass-tb',
   	'copy',
   	'images',
 	'uglify');

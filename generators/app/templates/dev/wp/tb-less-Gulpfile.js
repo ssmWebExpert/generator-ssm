@@ -6,24 +6,12 @@
 1. Load all Gulp dependency NPM packages listed in `package.json`
 **********************************************************************/
 
-var gulp = require('gulp'),
+const gulp = require('gulp'),
 	browserSync = require('browser-sync').create(),
-	$ = require('gulp-load-plugins')(),
-	pug = require('gulp-pug'),
-	gulp_watch_pug = require('gulp-watch-pug'),
-	clean = require('gulp-contrib-clean'),
-	copy = require('gulp-contrib-copy'),
-	pkg = require('./package.json'),
-	imagemin = require('gulp-imagemin');
-	uglify = require('gulp-uglify');
-	uglifycss = require('gulp-uglifycss');
-	autoprefixer = require('gulp-autoprefixer');
-	rename = require("gulp-rename");
-	less = require('gulp-less');
-	path = require('path');
-	reload = browserSync.reload,
-	gcmq = require('gulp-group-css-media-queries');
-	copyhtml = require('ionic-gulp-html-copy');
+	$ = require('gulp-load-plugins')();
+	pkg = require('./package.json');
+	run = require('run-sequence');
+	wiredep = require('wiredep').stream;
 	src = './src',
 	dist = './dist',
 	tbPath = './bower_components/bootstrap',
@@ -44,7 +32,7 @@ var gulp = require('gulp'),
 
 gulp.task('images', function(){
     gulp.src([config.imgPathSrc + '**/*'])
-        .pipe(imagemin())
+        .pipe($.imagemin({verbose: true}))
         .pipe(gulp.dest(config.imgPathDest));
 });
 
@@ -57,32 +45,41 @@ gulp.task('images', function(){
 
 gulp.task('less', function(){
 	return gulp.src(config.lessPath + '/**/style.less')
-		.pipe(less({}))
-	    .pipe(autoprefixer({
+		.pipe($.newer(config.cssPath))
+		.pipe($.less({
+			style: 'extended',
+			sourcemap: false,
+			errLogToConsole: true
+		}))
+	    .pipe($.autoprefixer({
 	        browsers: ['last 4 versions'],
 	        cascade: false
 	    }))
-        .pipe(gcmq())
-		.pipe(uglifycss({
-			"maxLineLen": 1,
-			"uglyComments": true
+        .pipe($.groupCssMediaQueries())
+		.pipe($.uglifycss({
+			"maxLineLen": 80,
+			"uglyComments": false
 		}))
 		.pipe(gulp.dest(dist))
 		.pipe(browserSync.stream());
 });
 
 gulp.task('less-tb', function(){
-	return gulp.src(config.tbPathLess + '/**/bootstrap.less')
-		.pipe($.newer(config.cssPath + '/css'))
-		.pipe(less({}))
-	    .pipe(autoprefixer({
+	return gulp.src(config.tbPathLess + '/bootstrap.less')
+		.pipe($.newer(config.cssPath))
+		.pipe($.less({
+			style: 'extended',
+			sourcemap: false,
+			errLogToConsole: true
+		}))
+	    .pipe($.autoprefixer({
 	        browsers: ['last 4 versions'],
 	        cascade: false
 	    }))
-        .pipe(gcmq())
-		.pipe(uglifycss({
-			"maxLineLen": 1,
-			"uglyComments": true
+        .pipe($.groupCssMediaQueries())
+		.pipe($.uglifycss({
+			"maxLineLen": 80,
+			"uglyComments": false
 		}))
 		.pipe(gulp.dest(config.cssPath));
 });
@@ -92,18 +89,17 @@ gulp.task('less-tb', function(){
 
 gulp.task('pug', function buildHTML() {
 	return gulp.src(src + '/*.pug')
-		.pipe(pug({
+		.pipe($.pug({
 			pretty: true
 		}))
+    	.pipe(wiredep())
+    	.pipe($.useref())
+    	.pipe($.if('*.js', $.uglify()))
+        .pipe($.if('*.css', $.uglifycss({
+			"maxLineLen": 80,
+			"uglyComments": false
+		})))
 		.pipe(gulp.dest(dist))
-		.pipe(browserSync.stream());
-});
-
-gulp.task('html', function() {
-	return copyhtml({
-			src: src + '/*.html',
-			dest: dist
-		})
 		.pipe(browserSync.stream());
 });
 
@@ -120,52 +116,63 @@ gulp.task('browser-sync', function() {
 	});
 });
 
-/* Cleanup the Less generated --sourcemap *.map.css files
+/* Cleanup the less generated --sourcemap *.map.css files
 -------------------------------------------------------------------- */
 
 gulp.task('clean', function(){
-	gulp.src([dist], {read: false}).pipe(clean());
+	gulp.src([dist], 
+		{read: false}
+	)
+	.pipe($.contribClean());
 });
 
 /* Copy
 -------------------------------------------------------------------- */
 
+gulp.task('html', function() {
+	return gulp.src(src + '/*.html')
+		.pipe($.contribCopy())
+    	.pipe(wiredep())
+    	.pipe($.useref())
+    	.pipe($.if('*.js', $.uglify()))
+        .pipe($.if('*.css', $.uglifycss({
+			"maxLineLen": 80,
+			"uglyComments": false
+		})))
+		.pipe(gulp.dest(dist))
+		.pipe(browserSync.stream());
+});
+
 gulp.task('copy', function(){
 	gulp.src([
 		config.jsPathSrc + '**/*.js'
 	])
-	.pipe(copy())
+	.pipe($.contribCopy())
 	.pipe(gulp.dest(dist));
 	gulp.src([
 		config.tbPathFonts + '/**/*.*'
 	])
-	.pipe(copy())
+	.pipe($.contribCopy())
 	.pipe(gulp.dest(dist + '/fonts'));
 	gulp.src([
 		config.tbPathJs + '/bootstrap.min.js'
 	])
-	.pipe(copy())
+	.pipe($.contribCopy())
 	.pipe(gulp.dest(dist + '/js'));
 	gulp.src([
 		config.pathFonts + '**/*.*'
 	])
-	.pipe(copy())
+	.pipe($.contribCopy())
 	.pipe(gulp.dest(dist));
 });
-
-// gulp.task('copyFonts', function(){
-// });
 
 gulp.task('copyImage', function(){
 	gulp.src([
 		config.imgPathSrc + '**/*.*'
 	])
-	.pipe(copy())
+	.pipe($.contribCopy())
 	.pipe(gulp.dest(config.imgPathDest));
 });
-
-// gulp.task('copyJs', function(){
-// });
 
 /**********************************************************************
 4. Uglify tasks
@@ -173,7 +180,7 @@ gulp.task('copyImage', function(){
 
 gulp.task('uglify', function () {
     gulp.src(config.jsPathSrc + '**/*.js')
-    .pipe(uglify())
+    .pipe($.uglify())
     .pipe(gulp.dest(dist));
 });
 
@@ -181,19 +188,16 @@ gulp.task('uglify', function () {
 5. Registered Gulp tasks
 **********************************************************************/
 
-gulp.task('copyAll', function(){
-  gulp.start('copy');
-  // gulp.start('rename');
-});
-
-gulp.task('build', ['clean'], function(){
-  gulp.start('pug');
-  gulp.start('html');
-  gulp.start('less');
-  gulp.start('less-tb');
-  gulp.start('copyAll');
-  gulp.start('images');
-  gulp.start('uglify');
+gulp.task('build', function(){
+  run(
+  	'clean',
+	'pug',
+	'html',
+	'less',
+	'less-tb',
+  	'copy',
+  	'images',
+	'uglify');
 });
 
 gulp.task('serve', ['build', 'browser-sync'], function(){

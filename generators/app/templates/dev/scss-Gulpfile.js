@@ -120,11 +120,6 @@ gulp.task('html', function() {
 
 gulp.task('copy', function(){
 	gulp.src([
-		config.jsPathSrc + '**/*.js'
-	])
-	.pipe($.contribCopy())
-	.pipe(gulp.dest(dist));
-	gulp.src([
 		config.pathFonts + '**/*.*'
 	])
 	.pipe($.contribCopy())
@@ -169,6 +164,7 @@ gulp.task('serve', ['build', 'browser-sync'], function(){
   gulp.watch(src + '/*.pug', ['pug']);
   gulp.watch(src + '/*.html', ['html']);
   gulp.watch(dist + '/*.html').on('change', browserSync.reload);
+  gulp.watch(src + '/**/*.js', ['uglify']).on('change', browserSync.reload);
     gulp.watch('src/images/**/*', ['copyImage']);
   gulp.watch(config.scssPath + '/**/*.scss', ['sass']).on('change', browserSync.reload);
 });

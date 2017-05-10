@@ -33,6 +33,7 @@ const gulp = require('gulp'),
 gulp.task('images', function(){
     gulp.src([config.imgPathSrc + '**/*'])
         .pipe($.imagemin({verbose: true}))
+	    .pipe($.plumber())
         .pipe(gulp.dest(config.imgPathDest));
 });
 
@@ -51,6 +52,7 @@ gulp.task('less', function(){
 			sourcemap: false,
 			errLogToConsole: true
 		}))
+	    .pipe($.plumber())
 	    .pipe($.autoprefixer({
 	        browsers: ['last 4 versions'],
 	        cascade: false
@@ -72,6 +74,7 @@ gulp.task('less-tb', function(){
 			sourcemap: false,
 			errLogToConsole: true
 		}))
+		.pipe($.plumber())
 	    .pipe($.autoprefixer({
 	        browsers: ['last 4 versions'],
 	        cascade: false
@@ -92,6 +95,7 @@ gulp.task('pug', function buildHTML() {
 		.pipe($.pug({
 			pretty: true
 		}))
+	    .pipe($.plumber())
     	.pipe(wiredep())
     	.pipe($.useref())
     	.pipe($.if('*.js', $.uglify()))
@@ -134,6 +138,7 @@ gulp.task('html', function() {
 		.pipe($.contribCopy())
     	.pipe(wiredep())
     	.pipe($.useref())
+	    .pipe($.plumber())
     	.pipe($.if('*.js', $.uglify()))
         .pipe($.if('*.css', $.uglifycss({
 			"maxLineLen": 80,

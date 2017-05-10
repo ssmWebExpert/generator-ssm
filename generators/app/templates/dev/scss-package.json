@@ -25,6 +25,7 @@
     "jstransformer-escape-html": "^1.0.0",
     "jstransformer-markdown-it": "^2.0.0",
     "gulp-group-css-media-queries": "^1.1.0",
+    "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.0.0"
   }
 }

@@ -56,6 +56,7 @@ gulp.task('sass', function(){
 			sourcemap: false,
 			errLogToConsole: true
 		}))
+	    .pipe($.plumber())
 	    .pipe($.autoprefixer({
 	        browsers: ['last 4 versions'],
 	        cascade: false
@@ -77,6 +78,7 @@ gulp.task('sass-tb', function(){
 			sourcemap: false,
 			errLogToConsole: true
 		}))
+	    .pipe($.plumber())
 	    .pipe($.autoprefixer({
 	        browsers: ['last 4 versions'],
 	        cascade: false
@@ -99,6 +101,7 @@ gulp.task('pug', function buildHTML() {
 		}))
     	.pipe(wiredep())
     	.pipe($.useref())
+	    .pipe($.plumber())
     	.pipe($.if('*.js', $.uglify()))
         .pipe($.if('*.css', $.uglifycss({
 			"maxLineLen": 80,
@@ -139,6 +142,7 @@ gulp.task('html', function() {
 		.pipe($.contribCopy())
     	.pipe(wiredep())
     	.pipe($.useref())
+	    .pipe($.plumber())
     	.pipe($.if('*.js', $.uglify()))
         .pipe($.if('*.css', $.uglifycss({
 			"maxLineLen": 80,
@@ -180,6 +184,7 @@ gulp.task('copyImage', function(){
 
 gulp.task('uglify', function () {
     gulp.src(config.jsPathSrc + '**/*.js')
+    .pipe($.plumber())
     .pipe($.uglify())
     .pipe(gulp.dest(dist));
 });

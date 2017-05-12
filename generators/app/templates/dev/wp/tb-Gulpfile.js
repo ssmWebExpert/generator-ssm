@@ -31,8 +31,8 @@ const gulp = require('gulp'),
 console.log($);
 gulp.task('images', function(){
     gulp.src([config.imgPathSrc + '**/*'])
-        .pipe($.imagemin({verbose: true}))
 	    .pipe($.plumber())
+        .pipe($.imagemin({verbose: true}))
         .pipe(gulp.dest(config.imgPathDest));
 });
 
@@ -52,12 +52,12 @@ gulp.task('rename', function(){
 gulp.task('sass', function(){
 	return gulp.src(config.scssPath + '/**/*.scss')
 		.pipe($.newer(config.cssPath))
+	    .pipe($.plumber())
 		.pipe($.sass({
 			style: 'extended',
 			sourcemap: false,
 			errLogToConsole: true
 		}))
-	    .pipe($.plumber())
 	    .pipe($.autoprefixer({
 	        browsers: ['last 4 versions'],
 	        cascade: false
@@ -74,12 +74,12 @@ gulp.task('sass', function(){
 gulp.task('sass-tb', function(){
 	return gulp.src(config.tbPathSass + '/**/*.scss')
 		.pipe($.newer(config.cssPath))
+	    .pipe($.plumber())
 		.pipe($.sass({
 			style: 'extended',
 			sourcemap: false,
 			errLogToConsole: true
 		}))
-	    .pipe($.plumber())
 	    .pipe($.autoprefixer({
 	        browsers: ['last 4 versions'],
 	        cascade: false
@@ -97,12 +97,12 @@ gulp.task('sass-tb', function(){
 
 gulp.task('pug', function buildHTML() {
 	return gulp.src(src + '/*.pug')
+	    .pipe($.plumber())
 		.pipe($.pug({
 			pretty: true
 		}))
     	.pipe(wiredep())
     	.pipe($.useref())
-	    .pipe($.plumber())
     	.pipe($.if('*.js', $.uglify()))
         .pipe($.if('*.css', $.uglifycss({
 			"maxLineLen": 80,
@@ -141,9 +141,9 @@ gulp.task('clean', function(){
 gulp.task('html', function() {
 	return gulp.src(src + '/*.html')
 		.pipe($.contribCopy())
+	    .pipe($.plumber())
     	.pipe(wiredep())
     	.pipe($.useref())
-	    .pipe($.plumber())
     	.pipe($.if('*.js', $.uglify()))
         .pipe($.if('*.css', $.uglifycss({
 			"maxLineLen": 80,

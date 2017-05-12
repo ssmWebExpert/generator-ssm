@@ -32,8 +32,8 @@ const gulp = require('gulp'),
 
 gulp.task('images', function(){
     gulp.src([config.imgPathSrc + '**/*'])
-        .pipe($.imagemin({verbose: true}))
 	    .pipe($.plumber())
+        .pipe($.imagemin({verbose: true}))
         .pipe(gulp.dest(config.imgPathDest));
 });
 
@@ -47,12 +47,12 @@ gulp.task('images', function(){
 gulp.task('less', function(){
 	return gulp.src(config.lessPath + '/**/style.less')
 		.pipe($.newer(config.cssPath))
+	    .pipe($.plumber())
 		.pipe($.less({
 			style: 'extended',
 			sourcemap: false,
 			errLogToConsole: true
 		}))
-	    .pipe($.plumber())
 	    .pipe($.autoprefixer({
 	        browsers: ['last 4 versions'],
 	        cascade: false
@@ -69,12 +69,12 @@ gulp.task('less', function(){
 gulp.task('less-tb', function(){
 	return gulp.src(config.tbPathLess + '/bootstrap.less')
 		.pipe($.newer(config.cssPath))
+	    .pipe($.plumber())
 		.pipe($.less({
 			style: 'extended',
 			sourcemap: false,
 			errLogToConsole: true
 		}))
-	    .pipe($.plumber())
 	    .pipe($.autoprefixer({
 	        browsers: ['last 4 versions'],
 	        cascade: false
@@ -92,12 +92,12 @@ gulp.task('less-tb', function(){
 
 gulp.task('pug', function buildHTML() {
 	return gulp.src(src + '/*.pug')
+	    .pipe($.plumber())
 		.pipe($.pug({
 			pretty: true
 		}))
     	.pipe(wiredep())
     	.pipe($.useref())
-	    .pipe($.plumber())
     	.pipe($.if('*.js', $.uglify()))
         .pipe($.if('*.css', $.uglifycss({
 			"maxLineLen": 80,
@@ -136,9 +136,9 @@ gulp.task('clean', function(){
 gulp.task('html', function() {
 	return gulp.src(src + '/*.html')
 		.pipe($.contribCopy())
+	    .pipe($.plumber())
     	.pipe(wiredep())
     	.pipe($.useref())
-	    .pipe($.plumber())
     	.pipe($.if('*.js', $.uglify()))
         .pipe($.if('*.css', $.uglifycss({
 			"maxLineLen": 80,

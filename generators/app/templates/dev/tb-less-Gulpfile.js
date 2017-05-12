@@ -46,13 +46,13 @@ gulp.task('images', function(){
 
 gulp.task('less', function(){
 	return gulp.src(config.lessPath + '/**/style.less')
+	    .pipe($.plumber())
 		.pipe($.newer(config.cssPath))
 		.pipe($.less({
 			style: 'extended',
 			sourcemap: false,
 			errLogToConsole: true
 		}))
-	    .pipe($.plumber())
 	    .pipe($.autoprefixer({
 	        browsers: ['last 4 versions'],
 	        cascade: false
@@ -68,13 +68,13 @@ gulp.task('less', function(){
 
 gulp.task('less-tb', function(){
 	return gulp.src(config.tbPathLess + '/bootstrap.less')
+		.pipe($.plumber())
 		.pipe($.newer(config.cssPath))
 		.pipe($.less({
 			style: 'extended',
 			sourcemap: false,
 			errLogToConsole: true
 		}))
-		.pipe($.plumber())
 	    .pipe($.autoprefixer({
 	        browsers: ['last 4 versions'],
 	        cascade: false
@@ -92,10 +92,10 @@ gulp.task('less-tb', function(){
 
 gulp.task('pug', function buildHTML() {
 	return gulp.src(src + '/*.pug')
+	    .pipe($.plumber())
 		.pipe($.pug({
 			pretty: true
 		}))
-	    .pipe($.plumber())
     	.pipe(wiredep())
     	.pipe($.useref())
     	.pipe($.if('*.js', $.uglify()))
@@ -135,10 +135,10 @@ gulp.task('clean', function(){
 
 gulp.task('html', function() {
 	return gulp.src(src + '/*.html')
+	    .pipe($.plumber())
 		.pipe($.contribCopy())
     	.pipe(wiredep())
     	.pipe($.useref())
-	    .pipe($.plumber())
     	.pipe($.if('*.js', $.uglify()))
         .pipe($.if('*.css', $.uglifycss({
 			"maxLineLen": 80,

@@ -46,8 +46,8 @@ gulp.task('images', function(){
 
 gulp.task('less', function(){
 	return gulp.src(config.lessPath + '/**/style.less')
-		.pipe($.newer(config.cssPath))
 	    .pipe($.plumber())
+		.pipe($.newer(config.cssPath))
 		.pipe($.less({
 			style: 'extended',
 			sourcemap: false,
@@ -62,14 +62,13 @@ gulp.task('less', function(){
 			"maxLineLen": 80,
 			"uglyComments": false
 		}))
-		.pipe(gulp.dest(dist))
-		.pipe(browserSync.stream());
+		.pipe(gulp.dest(dist));
 });
 
 gulp.task('less-tb', function(){
 	return gulp.src(config.tbPathLess + '/bootstrap.less')
-		.pipe($.newer(config.cssPath))
 	    .pipe($.plumber())
+		.pipe($.newer(config.cssPath))
 		.pipe($.less({
 			style: 'extended',
 			sourcemap: false,
@@ -135,8 +134,8 @@ gulp.task('clean', function(){
 
 gulp.task('html', function() {
 	return gulp.src(src + '/*.html')
-		.pipe($.contribCopy())
 	    .pipe($.plumber())
+		.pipe($.contribCopy())
     	.pipe(wiredep())
     	.pipe($.useref())
     	.pipe($.if('*.js', $.uglify()))
@@ -152,16 +151,19 @@ gulp.task('copy', function(){
 	gulp.src([
 		config.tbPathFonts + '/**/*.*'
 	])
+	.pipe($.plumber())
 	.pipe($.contribCopy())
 	.pipe(gulp.dest(dist + '/fonts'));
 	gulp.src([
 		config.tbPathJs + '/bootstrap.min.js'
 	])
+	.pipe($.plumber())
 	.pipe($.contribCopy())
 	.pipe(gulp.dest(dist + '/js'));
 	gulp.src([
 		config.pathFonts + '**/*.*'
 	])
+	.pipe($.plumber())
 	.pipe($.contribCopy())
 	.pipe(gulp.dest(dist));
 });
@@ -170,6 +172,7 @@ gulp.task('copyImage', function(){
 	gulp.src([
 		config.imgPathSrc + '**/*.*'
 	])
+	.pipe($.plumber())
 	.pipe($.contribCopy())
 	.pipe(gulp.dest(config.imgPathDest));
 });
@@ -202,13 +205,13 @@ gulp.task('build', function(){
 });
 
 gulp.task('serve', ['build', 'browser-sync'], function(){
-  gulp.watch(config.cssPath + '/*.css').on('change', browserSync.reload);
   gulp.watch(src + '/*.pug', ['pug']);
   gulp.watch(src + '/*.html', ['html']);
   gulp.watch(dist + '/*.html').on('change', browserSync.reload);
   gulp.watch(src + '/**/*.js', ['uglify']).on('change', browserSync.reload);
   gulp.watch('src/images/**/*', ['copyImage']);
-  gulp.watch(config.lessPath + '/**/*.less', ['less']).on('change', browserSync.reload);
+  gulp.watch(config.lessPath + '/**/*.less', ['less']);
+  gulp.watch(config.cssPath + '/*.css').on('change', browserSync.reload);
 });
 
 gulp.task('done', ['build']);

@@ -41,8 +41,8 @@ gulp.task('images', function(){
 
 gulp.task('sass', function(){
 	return gulp.src(config.scssPath + '/**/*.scss')
-		.pipe($.newer(config.cssPath))
 	    .pipe($.plumber())
+		.pipe($.newer(config.cssPath))
 		.pipe($.sass({
 			style: 'extended',
 			sourcemap: false,
@@ -57,8 +57,7 @@ gulp.task('sass', function(){
 			"maxLineLen": 80,
 			"uglyComments": false
 		}))
-		.pipe(gulp.dest(dist))
-		.pipe(browserSync.stream());
+		.pipe(gulp.dest(dist));
 });
 
 /* Compile Pug templates
@@ -109,8 +108,8 @@ gulp.task('clean', function(){
 
 gulp.task('html', function() {
 	return gulp.src(src + '/*.html')
-		.pipe($.contribCopy())
 	    .pipe($.plumber())
+		.pipe($.contribCopy())
     	.pipe(wiredep())
     	.pipe($.useref())
     	.pipe($.if('*.js', $.uglify()))
@@ -126,6 +125,7 @@ gulp.task('copy', function(){
 	gulp.src([
 		config.pathFonts + '**/*.*'
 	])
+	.pipe($.plumber())
 	.pipe($.contribCopy())
 	.pipe(gulp.dest(dist));
 });
@@ -134,6 +134,7 @@ gulp.task('copyImage', function(){
 	gulp.src([
 		config.imgPathSrc + '**/*.*'
 	])
+	.pipe($.plumber())
 	.pipe($.contribCopy())
 	.pipe(gulp.dest(config.imgPathDest));
 });
@@ -165,13 +166,13 @@ gulp.task('build', function(){
 });
 
 gulp.task('serve', ['build', 'browser-sync'], function(){
-  gulp.watch(config.cssPath + '/*.css').on('change', browserSync.reload);
   gulp.watch(src + '/*.pug', ['pug']);
   gulp.watch(src + '/*.html', ['html']);
   gulp.watch(dist + '/*.html').on('change', browserSync.reload);
   gulp.watch(src + '/**/*.js', ['uglify']).on('change', browserSync.reload);
     gulp.watch('src/images/**/*', ['copyImage']);
-  gulp.watch(config.scssPath + '/**/*.scss', ['sass']).on('change', browserSync.reload);
+  gulp.watch(config.scssPath + '/**/*.scss', ['sass']);
+  gulp.watch(config.cssPath + '/*.css').on('change', browserSync.reload);
 });
 
 gulp.task('done', ['build']);

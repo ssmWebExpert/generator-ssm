@@ -23,19 +23,8 @@ $media-expressions: (
 @import 'vendors/normalize';
 
 @import 'base/variables';
-@import 'base/functions';
 @import 'base/mixins';
 @import 'base/helpers';
 @import 'base/reset';
 @import 'base/typography';
 @import 'base/forms';
-
-#__bs_notify__ {
-	display: none;
-}
-
-img {
-  vertical-align: top;
-  max-width: 100%;
-  height: auto;
-}

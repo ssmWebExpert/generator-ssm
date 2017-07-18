@@ -31,7 +31,7 @@ module.exports = class extends Generator {
         message: 'Operation System?',
         choices: [{
           name: 'IOs',
-          value: 'IOs',
+          value: 'Mac OS',
           checked : true
         }, {
           name: 'Windows',
@@ -43,34 +43,34 @@ module.exports = class extends Generator {
         name: 'platform',
         message: 'Do you have Implementation?',
         choices: [{
-          name: 'WP',
-          value: 'WP',
-          checked : false
-        }, {
           name: 'markup',
           value: 'Markup Only',
           checked : true
+        }, {
+          name: 'WP',
+          value: 'WP',
+          checked : false
         }]
       },{
         type: 'list',
         name: 'framework',
         message: 'Preprocessor?',
         choices: [{
-          name: 'Bootstrap Less',
-          value: 'bootstrap-less',
-          checked : false
+          name: 'Sass',
+          value: 'sass',
+          checked : true
         }, {
           name: 'Bootstrap',
           value: 'bootstrap',
           checked : false
-        },{
+        }, {
+          name: 'Bootstrap Less',
+          value: 'bootstrap-less',
+          checked : false
+        }, {
           name: 'Less',
           value: 'less',
           checked : false
-        }, {
-          name: 'Sass',
-          value: 'sass',
-          checked : true
         }]
       }];
 

@@ -1,23 +1,23 @@
 block config
-	include ../includes/config
+	include ../includes/variables
 
 doctype html
 
 html(lang="en")
 	head
-		meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no")
-		// build:js /js/vendor.js
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+		meta(charset='utf-8')
+		// build:js js/vendor.js
 		// bower:js
 		// endbower
 		// endbuild
-		// build:css /css/vendor.css
+		// build:css css/vendor.css
 		// bower:css
 		// endbower
 		// endbuild
 		script(type='text/javascript', src='js/jquery.main.js', defer='')
-		include ../includes/head
-		block head
-			
+		include ../includes/styles
+		//- block head
 		title #{siteTitle}
 	body
 		section.wrapper
@@ -27,4 +27,4 @@ html(lang="en")
 
 			include ../includes/footer
 
-		block scripts
+		//- block scripts

@@ -28,8 +28,13 @@ const gulp = require('gulp'),
 		imgPathDest: dist
 	};
 
-console.log($);
 gulp.task('images', function(){
+    gulp.src([config.imgPathSrc + '**/*'])
+	    .pipe($.plumber())
+        .pipe(gulp.dest(config.imgPathDest));
+});
+
+gulp.task('imagesDone', function(){
     gulp.src([config.imgPathSrc + '**/*'])
 	    .pipe($.plumber())
         .pipe($.imagemin({verbose: true}))
@@ -51,22 +56,46 @@ gulp.task('rename', function(){
 
 gulp.task('sass', function(){
 	return gulp.src(config.scssPath + '/**/*.scss')
+	    .pipe($.sourcemaps.init())
+	    .pipe($.plumber())
+		.pipe($.newer(config.cssPath))
+		.pipe($.sass({
+			style: 'extended',
+			sourcemap: true,
+			errLogToConsole: false
+		}).on('error', $.sass.logError))
+	    .pipe($.autoprefixer({
+	        browsers: ['last 2 versions'],
+	        cascade: false
+	    }))
+        .pipe($.groupCssMediaQueries())
+		// .pipe($.uglifycss({
+		// 	"maxLineLen": 80,
+		// 	"uglyComments": false
+		// }))
+		.pipe($.sourcemaps.write("./"))
+		.pipe(gulp.dest(config.cssPath));
+		.pipe(browserSync.stream());
+});
+
+gulp.task('sassDone', function(){
+	return gulp.src(config.scssPath + '/**/*.scss')
 	    .pipe($.plumber())
 		.pipe($.newer(config.cssPath))
 		.pipe($.sass({
 			style: 'extended',
 			sourcemap: false,
-			errLogToConsole: true
-		}))
+			errLogToConsole: false
+		}).on('error', $.sass.logError))
 	    .pipe($.autoprefixer({
-	        browsers: ['last 4 versions'],
+	        browsers: ['last 2 versions'],
 	        cascade: false
 	    }))
         .pipe($.groupCssMediaQueries())
-		.pipe($.uglifycss({
-			"maxLineLen": 80,
-			"uglyComments": false
-		}))
+		// .pipe($.uglifycss({
+		// 	"maxLineLen": 1,
+		// 	"uglyComments": false
+		// }))
 		.pipe(gulp.dest(config.cssPath));
 });
 
@@ -83,11 +112,11 @@ gulp.task('sass-tb', function(){
 	        browsers: ['last 4 versions'],
 	        cascade: false
 	    }))
-        .pipe($.groupCssMediaQueries())
-		.pipe($.uglifycss({
-			"maxLineLen": 80,
-			"uglyComments": false
-		}))
+		.pipe($.groupCssMediaQueries())
+		// .pipe($.uglifycss({
+		// 	"maxLineLen": 80,
+		// 	"uglyComments": false
+		// }))
 		.pipe(gulp.dest(config.cssPath));
 });
 
@@ -102,14 +131,19 @@ gulp.task('pug', function buildHTML() {
 		}))
     	.pipe(wiredep())
     	.pipe($.useref())
-    	.pipe($.if('*.js', $.uglify()))
-        .pipe($.if('*.css', $.uglifycss({
-			"maxLineLen": 80,
-			"uglyComments": false
-		})))
-		.pipe(gulp.dest(dist))
-		.pipe(browserSync.stream());
+		//.pipe($.if('*.js', $.uglify()))
+		//.pipe($.if('*.css', $.uglifycss({
+		//	"maxLineLen": 80,
+		//	"uglyComments": false
+		//})))
+		.pipe(gulp.dest(dist));
 });
+
+gulp.task('pug-watch', ['pug'], function (done) {
+    browserSync.reload();
+    done();
+});
+
 
 /* Run a proxy server
 -------------------------------------------------------------------- */
@@ -143,13 +177,17 @@ gulp.task('html', function() {
 		.pipe($.contribCopy())
     	.pipe(wiredep())
     	.pipe($.useref())
-    	.pipe($.if('*.js', $.uglify()))
-        .pipe($.if('*.css', $.uglifycss({
-			"maxLineLen": 80,
-			"uglyComments": false
-		})))
-		.pipe(gulp.dest(dist))
-		.pipe(browserSync.stream());
+  //   	.pipe($.if('*.js', $.uglify()))
+  //       .pipe($.if('*.css', $.uglifycss({
+		// 	"maxLineLen": 80,
+		// 	"uglyComments": false
+		// })))
+		.pipe(gulp.dest(dist));
+});
+
+gulp.task('html-watch', ['html'], function (done) {
+    browserSync.reload();
+    done();
 });
 
 gulp.task('copy', function(){
@@ -200,8 +238,8 @@ gulp.task('uglify', function () {
 gulp.task('build', function(){
   run(
   	'clean',
-	'pug',
-	'html',
+	'pug-watch',
+	'html-watch',
 	'rename',
 	'sass',
 	'sass-tb',
@@ -211,13 +249,22 @@ gulp.task('build', function(){
 });
 
 gulp.task('serve', ['build', 'browser-sync'], function(){
-  gulp.watch(src + '/*.pug', ['pug']);
-  gulp.watch(src + '/*.html', ['html']);
-  gulp.watch(dist + '/*.html').on('change', browserSync.reload);
+  gulp.watch(src + '/*.pug', ['pug-watch']);
+  gulp.watch(src + '/*.html', ['html-watch']);
   gulp.watch(src + '/**/*.js', ['uglify']).on('change', browserSync.reload);
   gulp.watch('src/images/**/*', ['copyImage']);
   gulp.watch(config.scssPath + '/**/*.scss', ['sass']);
-  gulp.watch(config.cssPath + '/*.css').on('change', browserSync.reload);
 });
 
-gulp.task('done', ['build']);
+gulp.task('build', function(){
+  run(
+  	'clean',
+	'pug',
+	'html',
+	'rename',
+	'sassDone',
+	'sass-tb',
+  	'copy',
+  	'imagesDone',
+	'uglify');
+});

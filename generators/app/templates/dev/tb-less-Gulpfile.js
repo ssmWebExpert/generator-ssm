@@ -33,10 +33,15 @@ const gulp = require('gulp'),
 gulp.task('images', function(){
     gulp.src([config.imgPathSrc + '**/*'])
 	    .pipe($.plumber())
-        .pipe($.imagemin({verbose: true}))
         .pipe(gulp.dest(config.imgPathDest));
 });
 
+gulp.task('imagesDone', function(){
+    gulp.src([config.imgPathSrc + '**/*'])
+	    .pipe($.plumber())
+        .pipe($.imagemin({verbose: true}))
+        .pipe(gulp.dest(config.imgPathDest));
+});
 /**********************************************************************
 3. Configure Gulp tasks
 **********************************************************************/
@@ -47,21 +52,51 @@ gulp.task('images', function(){
 gulp.task('less', function(){
 	return gulp.src(config.lessPath + '/**/style.less')
 	    .pipe($.plumber())
+	    .pipe($.sourcemaps.init())
 		.pipe($.newer(config.cssPath))
 		.pipe($.less({
 			style: 'extended',
 			sourcemap: false,
 			errLogToConsole: true
+		})).on('error', function(err){
+			gutil.log(err);
+			this.emit('end');
 		}))
 	    .pipe($.autoprefixer({
 	        browsers: ['last 4 versions'],
 	        cascade: false
 	    }))
         .pipe($.groupCssMediaQueries())
-		.pipe($.uglifycss({
-			"maxLineLen": 80,
-			"uglyComments": false
+		// .pipe($.uglifycss({
+		// 	"maxLineLen": 80,
+		// 	"uglyComments": false
+		// }))
+		.pipe($.sourcemaps.write("./"))
+		.pipe(gulp.dest(config.cssPath))
+		.pipe(browserSync.stream());
+});
+
+gulp.task('lessDone', function(){
+	return gulp.src(config.lessPath + '/**/style.less')
+	    .pipe($.plumber())
+		.pipe($.newer(config.cssPath))
+		.pipe($.less({
+			style: 'extended',
+			sourcemap: false,
+			errLogToConsole: true
+		})).on('error', function(err){
+			gutil.log(err);
+			this.emit('end');
 		}))
+	    .pipe($.autoprefixer({
+	        browsers: ['last 4 versions'],
+	        cascade: false
+	    }))
+        .pipe($.groupCssMediaQueries())
+		// .pipe($.uglifycss({
+		// 	"maxLineLen": 80,
+		// 	"uglyComments": false
+		// }))
 		.pipe(gulp.dest(config.cssPath));
 });
 
@@ -79,10 +114,10 @@ gulp.task('less-tb', function(){
 	        cascade: false
 	    }))
         .pipe($.groupCssMediaQueries())
-		.pipe($.uglifycss({
-			"maxLineLen": 80,
-			"uglyComments": false
-		}))
+		// .pipe($.uglifycss({
+		// 	"maxLineLen": 80,
+		// 	"uglyComments": false
+		// }))
 		.pipe(gulp.dest(config.cssPath));
 });
 
@@ -97,13 +132,17 @@ gulp.task('pug', function buildHTML() {
 		}))
     	.pipe(wiredep())
     	.pipe($.useref())
-    	.pipe($.if('*.js', $.uglify()))
-        .pipe($.if('*.css', $.uglifycss({
-			"maxLineLen": 80,
-			"uglyComments": false
-		})))
-		.pipe(gulp.dest(dist))
-		.pipe(browserSync.stream());
+		//.pipe($.if('*.js', $.uglify()))
+		//.pipe($.if('*.css', $.uglifycss({
+		//	"maxLineLen": 80,
+		//	"uglyComments": false
+		//})))
+		.pipe(gulp.dest(dist));
+});
+
+gulp.task('pug-watch', ['pug'], function (done) {
+    browserSync.reload();
+    done();
 });
 
 /* Run a proxy server
@@ -119,7 +158,7 @@ gulp.task('browser-sync', function() {
 	});
 });
 
-/* Cleanup the less generated --sourcemap *.map.css files
+/* Cleanup the Sass generated --sourcemap *.map.css files
 -------------------------------------------------------------------- */
 
 gulp.task('clean', function(){
@@ -138,13 +177,17 @@ gulp.task('html', function() {
 		.pipe($.contribCopy())
     	.pipe(wiredep())
     	.pipe($.useref())
-    	.pipe($.if('*.js', $.uglify()))
-        .pipe($.if('*.css', $.uglifycss({
-			"maxLineLen": 80,
-			"uglyComments": false
-		})))
-		.pipe(gulp.dest(dist))
-		.pipe(browserSync.stream());
+  //   	.pipe($.if('*.js', $.uglify()))
+  //       .pipe($.if('*.css', $.uglifycss({
+		// 	"maxLineLen": 80,
+		// 	"uglyComments": false
+		// })))
+		.pipe(gulp.dest(dist));
+});
+
+gulp.task('html-watch', ['html'], function (done) {
+    browserSync.reload();
+    done();
 });
 
 gulp.task('copy', function(){
@@ -167,11 +210,11 @@ gulp.task('copy', function(){
 	.pipe(gulp.dest(dist));
 });
 
+
 gulp.task('copyImage', function(){
 	gulp.src([
 		config.imgPathSrc + '**/*.*'
 	])
-	.pipe($.plumber())
 	.pipe($.contribCopy())
 	.pipe(gulp.dest(config.imgPathDest));
 });
@@ -182,8 +225,8 @@ gulp.task('copyImage', function(){
 
 gulp.task('uglify', function () {
     gulp.src(config.jsPathSrc + '**/*.js')
-	.pipe($.plumber())
-    .pipe($.uglify())
+    .pipe($.plumber())
+    // .pipe($.uglify())
     .pipe(gulp.dest(dist));
 });
 
@@ -194,8 +237,8 @@ gulp.task('uglify', function () {
 gulp.task('build', function(){
   run(
   	'clean',
-	'pug',
-	'html',
+	'pug-watch',
+	'html-watch',
 	'less',
 	'less-tb',
   	'copy',
@@ -204,13 +247,21 @@ gulp.task('build', function(){
 });
 
 gulp.task('serve', ['build', 'browser-sync'], function(){
-  gulp.watch(src + '/*.pug', ['pug']);
-  gulp.watch(src + '/*.html', ['html']);
-  gulp.watch(dist + '/*.html').on('change', browserSync.reload);
+  gulp.watch(src + '/*.pug', ['pug-watch']);
+  gulp.watch(src + '/*.html', ['html-watch']);
   gulp.watch(src + '/**/*.js', ['uglify']).on('change', browserSync.reload);
   gulp.watch('src/images/**/*', ['copyImage']);
   gulp.watch(config.lessPath + '/**/*.less', ['less']);
-  gulp.watch(config.cssPath + '/*.css').on('change', browserSync.reload);
 });
 
-gulp.task('done', ['build']);
+gulp.task('build', function(){
+  run(
+  	'clean',
+	'pug',
+	'html',
+	'lessDone',
+	'less-tb',
+  	'copy',
+  	'imagesDone',
+	'uglify');
+});

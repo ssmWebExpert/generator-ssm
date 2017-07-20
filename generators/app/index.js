@@ -30,8 +30,8 @@ module.exports = class extends Generator {
         name: 'OperationSystem',
         message: 'Operation System?',
         choices: [{
-          name: 'IOs',
-          value: 'Mac OS',
+          name: 'Mac Operation System',
+          value: 'IOs',
           checked : true
         }, {
           name: 'Windows',
@@ -43,11 +43,11 @@ module.exports = class extends Generator {
         name: 'platform',
         message: 'Do you have Implementation?',
         choices: [{
-          name: 'markup',
+          name: 'Markup Only',
           value: 'Markup Only',
           checked : true
         }, {
-          name: 'WP',
+          name: 'WP CMS',
           value: 'WP',
           checked : false
         }]
@@ -91,7 +91,7 @@ module.exports = class extends Generator {
       );
       this.fs.copy(
         this.templatePath('dev/head.pug'),
-        this.destinationPath(this.data.appName + '/markup/src/includes/head.pug')
+        this.destinationPath(this.data.appName + '/markup/src/pug/includes/styles.pug')
       );
       if(this.data.operationSystem == 'IOs') {
         this.fs.copy(
@@ -161,7 +161,7 @@ module.exports = class extends Generator {
           );
           this.fs.copy(
             this.templatePath('dev/tb-head.pug'),
-            this.destinationPath(this.data.appName + '/markup/src/includes/head.pug')
+            this.destinationPath(this.data.appName + '/markup/src/pug/includes/styles.pug')
           );
         }
         else if(this.data.framework == 'bootstrap-less') {
@@ -183,7 +183,7 @@ module.exports = class extends Generator {
           );
           this.fs.copy(
             this.templatePath('dev/tb-head.pug'),
-            this.destinationPath(this.data.appName + '/markup/src/includes/head.pug')
+            this.destinationPath(this.data.appName + '/markup/src/pug/includes/styles.pug')
           );
         };
       }
@@ -207,7 +207,7 @@ module.exports = class extends Generator {
           );
           this.fs.copy(
             this.templatePath('dev/wp-head.pug'),
-            this.destinationPath(this.data.appName + '/markup/src/includes/head.pug')
+            this.destinationPath(this.data.appName + '/markup/src/pug/includes/styles.pug')
           );
         }
         else if(this.data.framework == "less") {
@@ -229,7 +229,7 @@ module.exports = class extends Generator {
           );
           this.fs.copy(
             this.templatePath('dev/wp-head.pug'),
-            this.destinationPath(this.data.appName + '/markup/src/includes/head.pug')
+            this.destinationPath(this.data.appName + '/markup/src/pug/includes/styles.pug')
           );
         }
         else if(this.data.framework == 'bootstrap') {
@@ -251,7 +251,7 @@ module.exports = class extends Generator {
           );
           this.fs.copy(
             this.templatePath('dev/tb-wp-head.pug'),
-            this.destinationPath(this.data.appName + '/markup/src/includes/head.pug')
+            this.destinationPath(this.data.appName + '/markup/src/pug/includes/styles.pug')
           );
         }
         else if(this.data.framework == 'bootstrap-less') {
@@ -273,7 +273,7 @@ module.exports = class extends Generator {
           );
           this.fs.copy(
             this.templatePath('dev/tb-wp-head.pug'),
-            this.destinationPath(this.data.appName + '/markup/src/includes/head.pug')
+            this.destinationPath(this.data.appName + '/markup/src/pug/includes/styles.pug')
           );
         };
       }

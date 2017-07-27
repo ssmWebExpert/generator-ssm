@@ -3,7 +3,7 @@
 // Color names - http://name-of-color.com/
 
 $gray: #999;
-$black: #333;
+$black: #000;
 $white: #fff;
 $light-blue: #39f;
 
@@ -19,10 +19,19 @@ $base-font-family: $base-font-sans-serif !default;
 
 $vertical-rhythm: ($line-height-base * 1em);
 
-$base-min-width: 320px;
+// Indents
+$gap: 10px;
+$trim: 15px;
+$trim-middle: 20px;
+$trim-big: 30px;
 
-// Liks
+$base-min-width: 320px;
+$max-content-width: 1140px;
+$max-container-width: $trim + $max-content-width + $trim;
+
+// Links
 $base-link-color: $light-blue;
+$base-link-hover-color: $black;
 
 // Buttons 
 $btn-color: $white !default;
@@ -31,7 +40,8 @@ $btn-padding: 0.4em 0.7em !default;
 $btn-font-size: inherit !default;
 
 // Forms
-$form-element-padding: $btn-padding !default;
+$form-element-padding: 9px 10px !default;
+$form-element-background: $white !default;
 $form-element-border-color: $gray !default;
 $form-element-focus-border-color: $black !default;
 $placeholder-color: $gray !default;

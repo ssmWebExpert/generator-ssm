@@ -198,6 +198,14 @@ module.exports = class extends Generator {
             this.destinationPath(this.data.appName + '/markup/package.json')
           );
           this.fs.copy(
+            this.templatePath('dev/wp/theme-gulpfile.js'),
+            this.destinationPath(this.data.appName + '/markup/theme-gulpfile.js')
+          );
+          this.fs.copy(
+            this.templatePath('dev/scss-package.json'),
+            this.destinationPath(this.data.appName + '/markup/theme-package.json')
+          );
+          this.fs.copy(
             this.templatePath('dev/bower.json'),
             this.destinationPath(this.data.appName + '/markup/bower.json')
           );
@@ -218,6 +226,14 @@ module.exports = class extends Generator {
           this.fs.copy(
             this.templatePath('dev/less-package.json'),
             this.destinationPath(this.data.appName + '/markup/package.json')
+          );
+          this.fs.copy(
+            this.templatePath('dev/wp/theme-less-gulpfile.js'),
+            this.destinationPath(this.data.appName + '/markup/theme-gulpfile.js')
+          );
+          this.fs.copy(
+            this.templatePath('dev/less-package.json'),
+            this.destinationPath(this.data.appName + '/markup/theme-package.json')
           );
           this.fs.copy(
             this.templatePath('dev/bower.json'),
@@ -242,6 +258,14 @@ module.exports = class extends Generator {
             this.destinationPath(this.data.appName + '/markup/package.json')
           );
           this.fs.copy(
+            this.templatePath('dev/wp/theme-gulpfile.js'),
+            this.destinationPath(this.data.appName + '/markup/theme-gulpfile.js')
+          );
+          this.fs.copy(
+            this.templatePath('dev/scss-package.json'),
+            this.destinationPath(this.data.appName + '/markup/theme-package.json')
+          );
+          this.fs.copy(
             this.templatePath('dev/tb-bower.json'),
             this.destinationPath(this.data.appName + '/markup/bower.json')
           );
@@ -262,6 +286,14 @@ module.exports = class extends Generator {
           this.fs.copy(
             this.templatePath('dev/tb-less-package.json'),
             this.destinationPath(this.data.appName + '/markup/package.json')
+          );
+          this.fs.copy(
+            this.templatePath('dev/wp/theme-less-gulpfile.js'),
+            this.destinationPath(this.data.appName + '/markup/theme-gulpfile.js')
+          );
+          this.fs.copy(
+            this.templatePath('dev/less-package.json'),
+            this.destinationPath(this.data.appName + '/markup/theme-package.json')
           );
           this.fs.copy(
             this.templatePath('dev/tb-less-bower.json'),

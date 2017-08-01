@@ -205,7 +205,7 @@ gulp.task('build', function(){
 	'uglify');
 });
 
-gulp.task('serve', ['build', 'browser-sync'], function(){
+gulp.task('default', ['build', 'browser-sync'], function(){
   gulp.watch(src + '/**/*.pug', ['pug-watch']);
   gulp.watch(src + '/*.html', ['html-watch']);
   gulp.watch(src + '/**/*.js', ['uglify']).on('change', browserSync.reload);

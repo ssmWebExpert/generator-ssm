@@ -21,27 +21,38 @@ const gulp = require('gulp'),
 		cssPath: dist + '/css',
 		jsPathSrc: src + '/js',
 		jsPathDest: dist + '/js',
-		imgPathSrc: src + '/images',
 		tbPathFonts: tbPath + '/fonts',
 		pathFonts: src + '/fonts',
 		destFonts: dist + '/fonts',
 		tbPathLess: tbPath + '/less',
 		tbPathJs: tbPath + '/dist/js',
-		imgPathDest: dist
+		imgPathSrc: src + '/images/',
+		imgPathDest: dist + '/images'
 	};
 
 gulp.task('images', function(){
-    gulp.src([config.imgPathSrc + '**/*'])
+	gulp.src([config.imgPathSrc + '*.*'])
 	    .pipe($.plumber())
         .pipe(gulp.dest(config.imgPathDest));
 });
 
+gulp.task('wp', function(){
+	gulp.src([
+		wp + "/**/*.*"
+	])
+	.pipe($.plumber())
+	.pipe($.contribCopy())
+	.pipe(gulp.dest(dist));
+});
+
 gulp.task('imagesDone', function(){
-    gulp.src([config.imgPathSrc + '**/*'])
+	gulp.src([config.imgPathSrc + '*.*'])
 	    .pipe($.plumber())
+        .pipe(gulp.dest(dist + '/sourceimages'))
         .pipe($.imagemin({verbose: true}))
         .pipe(gulp.dest(config.imgPathDest));
 });
+
 /**********************************************************************
 3. Configure Gulp tasks
 **********************************************************************/
@@ -210,13 +221,13 @@ gulp.task('copy', function(){
 	.pipe(gulp.dest(dist));
 });
 
-
-gulp.task('copyImage', function(){
+gulp.task('copyLess', function(){
 	gulp.src([
-		config.imgPathSrc + '**/*.*'
+		config.lessPath + "**/**/*.*"
 	])
+	.pipe($.plumber())
 	.pipe($.contribCopy())
-	.pipe(gulp.dest(config.imgPathDest));
+	.pipe(gulp.dest(dist));
 });
 
 /**********************************************************************
@@ -246,11 +257,11 @@ gulp.task('build', function(){
 	'uglify');
 });
 
-gulp.task('serve', ['build', 'browser-sync'], function(){
-  gulp.watch(src + '/*.pug', ['pug-watch']);
+gulp.task('serve', ['default', 'browser-sync'], function(){
+  gulp.watch(src + '/**/*.pug', ['pug-watch']);
   gulp.watch(src + '/*.html', ['html-watch']);
   gulp.watch(src + '/**/*.js', ['uglify']).on('change', browserSync.reload);
-  gulp.watch('src/images/**/*', ['copyImage']);
+  gulp.watch('src/images/**/*', ['images']);
   gulp.watch(config.lessPath + '/**/*.less', ['less']);
 });
 
@@ -259,9 +270,11 @@ gulp.task('build', function(){
   	'clean',
 	'pug',
 	'html',
+  	'copyLess',
 	'lessDone',
 	'less-tb',
   	'copy',
   	'imagesDone',
+  	'wp',
 	'uglify');
 });

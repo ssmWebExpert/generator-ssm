@@ -1,2 +1,2 @@
 cd markup
-gulp serve
+gulp

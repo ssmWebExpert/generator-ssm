@@ -11,8 +11,8 @@ const gulp = require('gulp'),
 	$ = require('gulp-load-plugins')();
 	pkg = require('./package.json');
 	run = require('run-sequence');
-	run = require('gutil');
 	wiredep = require('wiredep').stream;
+	run = require('gutil');
 	src = './src',
 	dist = './dist',
 	config = {
@@ -23,22 +23,33 @@ const gulp = require('gulp'),
 		jsPathDest: dist + '/js',
 		pathFonts: src + '/fonts',
 		destFonts: dist + '/fonts',
-		imgPathSrc: src + '/images',
-		imgPathDest: dist
+		imgPathSrc: src + '/images/',
+		imgPathDest: dist + '/images'
 	};
 
 gulp.task('images', function(){
-    gulp.src([config.imgPathSrc + '**/*'])
+	gulp.src([config.imgPathSrc + '*.*'])
 	    .pipe($.plumber())
         .pipe(gulp.dest(config.imgPathDest));
 });
 
+gulp.task('wp', function(){
+	gulp.src([
+		wp + "/**/*.*"
+	])
+	.pipe($.plumber())
+	.pipe($.contribCopy())
+	.pipe(gulp.dest(dist));
+});
+
 gulp.task('imagesDone', function(){
-    gulp.src([config.imgPathSrc + '**/*'])
+	gulp.src([config.imgPathSrc + '*.*'])
 	    .pipe($.plumber())
+        .pipe(gulp.dest(dist + '/sourceimages'))
         .pipe($.imagemin({verbose: true}))
         .pipe(gulp.dest(config.imgPathDest));
 });
+
 /**********************************************************************
 3. Configure Gulp tasks
 **********************************************************************/
@@ -134,7 +145,7 @@ gulp.task('browser-sync', function() {
 	});
 });
 
-/* Cleanup the Sass generated --sourcemap *.map.css files
+/* Cleanup the Less generated --sourcemap *.map.css files
 -------------------------------------------------------------------- */
 
 gulp.task('clean', function(){
@@ -175,12 +186,13 @@ gulp.task('copy', function(){
 	.pipe(gulp.dest(dist));
 });
 
-gulp.task('copyImage', function(){
+gulp.task('copyLess', function(){
 	gulp.src([
-		config.imgPathSrc + '**/*.*'
+		config.lessPath + "**/**/*.*"
 	])
+	.pipe($.plumber())
 	.pipe($.contribCopy())
-	.pipe(gulp.dest(config.imgPathDest));
+	.pipe(gulp.dest(dist));
 });
 
 /**********************************************************************
@@ -209,11 +221,11 @@ gulp.task('build', function(){
 	'uglify');
 });
 
-gulp.task('serve', ['build', 'browser-sync'], function(){
-  gulp.watch(src + '/*.pug', ['pug-watch']);
+gulp.task('default', ['build', 'browser-sync'], function(){
+  gulp.watch(src + '/**/*.pug', ['pug-watch']);
   gulp.watch(src + '/*.html', ['html-watch']);
   gulp.watch(src + '/**/*.js', ['uglify']).on('change', browserSync.reload);
-  gulp.watch('src/images/**/*', ['copyImage']);
+  gulp.watch('src/images/**/*', ['copy']);
   gulp.watch(config.lessPath + '/**/*.less', ['less']);
 });
 
@@ -222,8 +234,10 @@ gulp.task('done', function(){
   	'clean',
 	'pug',
 	'html',
+  	'copyLess',
 	'lessDone',
   	'copy',
   	'imagesDone',
+  	'wp',
 	'uglify');
 });

@@ -74,7 +74,7 @@ gulp.task('sass', function(){
 		// 	"uglyComments": false
 		// }))
 		.pipe($.sourcemaps.write("./"))
-		.pipe(gulp.dest(config.cssPath));
+		.pipe(gulp.dest(config.cssPath))
 		.pipe(browserSync.stream());
 });
 

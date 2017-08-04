@@ -156,7 +156,7 @@ module.exports = class extends Generator {
             this.destinationPath(this.data.appName + '/markup/bower.json')
           );
           this.fs.copy(
-            this.templatePath('dev/scss'),
+            this.templatePath('dev/scssTB'),
             this.destinationPath(this.data.appName + '/markup/src/scss')
           );
           this.fs.copy(
@@ -270,7 +270,7 @@ module.exports = class extends Generator {
             this.destinationPath(this.data.appName + '/markup/bower.json')
           );
           this.fs.copy(
-            this.templatePath('dev/scss'),
+            this.templatePath('dev/scssTB'),
             this.destinationPath(this.data.appName + '/markup/src/scss')
           );
           this.fs.copy(

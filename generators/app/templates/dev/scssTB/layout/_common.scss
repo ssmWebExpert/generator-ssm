@@ -1,0 +1,12 @@
+#wrapper {
+	overflow: hidden;
+	width: 100%;
+	position: relative;
+}
+
+.container {
+	@extend %clearfix;
+	max-width: $max-container-width;
+	padding: 0 $trim;
+	margin: 0 auto;
+}

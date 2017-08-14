@@ -91,7 +91,7 @@ gulp.task('sassDone', function(){
 		// 	"maxLineLen": 1,
 		// 	"uglyComments": false
 		// }))
-		.pipe(gulp.dest(dist));
+		.pipe(gulp.dest(config.cssPath));
 });
 
 /* Compile Pug templates

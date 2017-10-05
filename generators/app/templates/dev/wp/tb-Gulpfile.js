@@ -28,9 +28,17 @@ const gulp = require('gulp'),
 		imgPathDest: dist + '/images'
 	};
 
+
 gulp.task('images', function(){
-	gulp.src([config.imgPathSrc + '*.*'])
+    gulp.src([config.imgPathSrc + '**/*'])
 	    .pipe($.plumber())
+        .pipe(gulp.dest(config.imgPathDest));
+});
+
+gulp.task('imagesDone', function(){
+    gulp.src([config.imgPathSrc + '**/*'])
+	    .pipe($.plumber())
+        .pipe($.imagemin({verbose: true}))
         .pipe(gulp.dest(config.imgPathDest));
 });
 
@@ -149,6 +157,20 @@ gulp.task('pug', function buildHTML() {
 		.pipe(gulp.dest(dist));
 });
 
+/*************************
+Use as Example for pug files convertation from another folder
+You need to add pugInc task to pug-watch[] and to done task
+*************************/
+
+// gulp.task('pugInc', function buildHTML() {
+// 	return gulp.src(src + '/inc/*.pug')
+// 		.pipe($.plumber())
+// 		.pipe($.pug({
+// 			pretty: true
+// 		}))
+// 		.pipe(gulp.dest(dist + "/inc/"));
+// });
+
 gulp.task('pug-watch', ['pug'], function (done) {
     browserSync.reload();
     done();
@@ -221,6 +243,26 @@ gulp.task('copy', function(){
 	.pipe(gulp.dest(dist));
 });
 
+/*************************
+Use as Example for file clone
+*************************/
+
+// gulp.task('copyVideo', function(){
+// 	gulp.src([
+// 		src + 'video/*.*'
+// 	])
+// 	.pipe($.contribCopy())
+// 	.pipe(gulp.dest(dist));
+// });
+
+gulp.task('copyImage', function(){
+	gulp.src([
+		config.imgPathSrc + '**/*.*'
+	])
+	.pipe($.contribCopy())
+	.pipe(gulp.dest(config.imgPathDest));
+});
+
 gulp.task('copyScss', function(){
 	gulp.src([
 		config.scssPath + "**/**/*.*"
@@ -262,7 +304,7 @@ gulp.task('serve', ['default', 'browser-sync'], function(){
   gulp.watch(src + '/**/*.pug', ['pug-watch']);
   gulp.watch(src + '/*.html', ['html-watch']);
   gulp.watch(src + '/**/*.js', ['uglify']).on('change', browserSync.reload);
-  gulp.watch('src/images/**/*', ['images']);
+  gulp.watch('src/images/**/*', ['copyImage']);
   gulp.watch(config.scssPath + '/**/*.scss', ['sass']);
 });
 

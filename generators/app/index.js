@@ -90,6 +90,10 @@ module.exports = class extends Generator {
         this.destinationPath(this.data.appName + '/markup')
       );
       this.fs.copy(
+        this.templatePath('dev/.gitignore'),
+        this.destinationPath(this.data.appName)
+      );
+      this.fs.copy(
         this.templatePath('dev/head.pug'),
         this.destinationPath(this.data.appName + '/markup/src/pug/includes/styles.pug')
       );

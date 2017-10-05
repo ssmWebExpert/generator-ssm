@@ -116,6 +116,20 @@ gulp.task('pug', function buildHTML() {
 		.pipe(gulp.dest(dist));
 });
 
+/*************************
+Use as Example for pug files convertation from another folder
+You need to add pugInc task to pug-watch[] and to done task
+*************************/
+
+// gulp.task('pugInc', function buildHTML() {
+// 	return gulp.src(src + '/inc/*.pug')
+// 		.pipe($.plumber())
+// 		.pipe($.pug({
+// 			pretty: true
+// 		}))
+// 		.pipe(gulp.dest(dist + "/inc/"));
+// });
+
 gulp.task('pug-watch', ['pug'], function (done) {
     browserSync.reload();
     done();
@@ -174,6 +188,18 @@ gulp.task('copy', function(){
 	.pipe($.contribCopy())
 	.pipe(gulp.dest(dist));
 });
+
+/*************************
+Use as Example for file clone
+*************************/
+
+// gulp.task('copyVideo', function(){
+// 	gulp.src([
+// 		src + 'video/*.*'
+// 	])
+// 	.pipe($.contribCopy())
+// 	.pipe(gulp.dest(dist));
+// });
 
 gulp.task('copyImage', function(){
 	gulp.src([

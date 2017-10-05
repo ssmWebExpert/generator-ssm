@@ -38,6 +38,14 @@ video, iframe, object, embed {
 blockquote, blockquote:before, blockquote:after, q, q:before, q:after {quotes: none;}
 blockquote:before, blockquote:after, q:before, q:after {content: '';}
 
+.resize-active #header * {
+	transform: none !important;
+}
+
+.container {
+	margin: 0 auto;
+}
+
 // lists
 // ul {
 // 	@extend %listreset;

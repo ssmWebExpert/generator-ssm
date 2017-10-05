@@ -2,7 +2,7 @@
   "name": "ssm",
   "private": true,
   "dependencies": {
-    "jQuery": "~1.12.4",
+    "jQuery": "~3.2.1",
     "bootstrap-sass": "~3.3.5"
   },
   "overrides": {

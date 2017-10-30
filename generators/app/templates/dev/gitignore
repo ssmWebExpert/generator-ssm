@@ -27,7 +27,8 @@ Temporary Items
 .apdisk
 
 # FE ignore List
-/bower_components/
-/node_modules/
+/markup/bower_components/
+/markup/node_modules/
 input/
-README.md
+/markup/README.md
+/markup/package-lock.json

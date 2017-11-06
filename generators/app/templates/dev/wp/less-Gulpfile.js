@@ -50,7 +50,7 @@ gulp.task('wp', function(){
 	.pipe(gulp.dest(dist));
 });
 
-gulp.task('imagesDone', function(){
+gulp.task('imagesDoneWp', function(){
 	gulp.src([config.imgPathSrc + '*.*'])
 	    .pipe($.plumber())
         .pipe(gulp.dest(dist + '/sourceimages'))
@@ -284,6 +284,7 @@ gulp.task('commit', function(){
 	'lessDone',
   	'copy',
   	'images',
+  	'imagesDoneWp',
   	'wp',
 	'uglify');
 });
@@ -297,6 +298,7 @@ gulp.task('done', function(){
 	'lessDone',
   	'copy',
   	'imagesDone',
+  	'imagesDoneWp',
   	'wp',
 	'uglify');
 });

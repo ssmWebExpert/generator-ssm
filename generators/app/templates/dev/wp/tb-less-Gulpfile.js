@@ -199,6 +199,10 @@ gulp.task('clean', function(){
 		{read: false}
 	)
 	.pipe($.contribClean());
+	gulp.src([config.imgPathSrc + '**.txt'], 
+		{read: false}
+	)
+	.pipe($.contribClean());
 });
 
 /* Copy
@@ -299,7 +303,7 @@ gulp.task('build', function(){
 	'uglify');
 });
 
-gulp.task('serve', ['default', 'browser-sync'], function(){
+gulp.task('default', ['build', 'browser-sync'], function(){
   gulp.watch(src + '/**/*.pug', ['pug-watch']);
   gulp.watch(src + '/*.html', ['html-watch']);
   gulp.watch(src + '/**/*.js', ['uglify']).on('change', browserSync.reload);
@@ -307,7 +311,21 @@ gulp.task('serve', ['default', 'browser-sync'], function(){
   gulp.watch(config.lessPath + '/**/*.less', ['less']);
 });
 
-gulp.task('build', function(){
+gulp.task('commit', function(){
+  run(
+  	'clean',
+	'pug',
+	'html',
+  	'copyLess',
+	'lessDone',
+	'less-tb',
+  	'copy',
+  	'images',
+  	'wp',
+	'uglify');
+});
+
+gulp.task('done', function(){
   run(
   	'clean',
 	'pug',

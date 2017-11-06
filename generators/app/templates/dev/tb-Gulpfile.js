@@ -153,6 +153,10 @@ gulp.task('clean', function(){
 		{read: false}
 	)
 	.pipe($.contribClean());
+	gulp.src([config.imgPathSrc + '**.txt'], 
+		{read: false}
+	)
+	.pipe($.contribClean());
 });
 
 /* Copy
@@ -263,7 +267,19 @@ gulp.task('default', ['build', 'browser-sync'], function(){
   gulp.watch(config.scssPath + '/**/*.scss', ['sass']);
 });
 
-gulp.task('build', function(){
+gulp.task('commit', function(){
+  run(
+  	'clean',
+	'pug',
+	'html',
+	'sassDone',
+	'copyTb',
+  	'copy',
+  	'images',
+	'uglify');
+});
+
+gulp.task('done', function(){
   run(
   	'clean',
 	'pug',

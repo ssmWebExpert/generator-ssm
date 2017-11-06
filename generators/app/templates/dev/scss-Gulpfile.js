@@ -153,6 +153,10 @@ gulp.task('clean', function(){
 		{read: false}
 	)
 	.pipe($.contribClean());
+	gulp.src([config.imgPathSrc + '**.txt'], 
+		{read: false}
+	)
+	.pipe($.contribClean());
 });
 
 /* Copy
@@ -237,6 +241,17 @@ gulp.task('default', ['build', 'browser-sync'], function(){
   gulp.watch(src + '/**/*.js', ['uglify']).on('change', browserSync.reload);
   gulp.watch('src/images/**/*', ['copyImage']);
   gulp.watch(config.scssPath + '/**/*.scss', ['sass']);
+});
+
+gulp.task('commit', function(){
+  run(
+  	'clean',
+	'pug',
+	'html',
+	'sassDone',
+  	'copy',
+  	'images',
+	'uglify');
 });
 
 gulp.task('done', function(){

@@ -39,7 +39,7 @@ blockquote, blockquote:before, blockquote:after, q, q:before, q:after {quotes: n
 blockquote:before, blockquote:after, q:before, q:after {content: '';}
 
 .resize-active #header * {
-	transform: none !important;
+	transition: none !important;
 }
 
 // lists

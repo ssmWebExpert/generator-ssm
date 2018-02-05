@@ -51,7 +51,7 @@ module.exports = class extends Generator {
           value: 'WP',
           checked : false
         }, {
-          name: 'Add NuN',
+          name: 'Add NaN',
           value: 'Add',
           checked : false
         }]

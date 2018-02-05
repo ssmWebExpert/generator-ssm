@@ -27,6 +27,14 @@ const gulp = require('gulp'),
 		imgPathDest: dist + '/images'
 	};
 
+gulp.task('wp-gulp', function(){
+	gulp.src('theme-gulpfile.js')
+		.pipe($.rename('gulpfile.js'))
+		.pipe(gulp.dest(dist));
+	gulp.src('theme-package.json')
+		.pipe($.rename('package.json'))
+		.pipe(gulp.dest(dist));
+});
 
 gulp.task('images', function(){
     gulp.src([config.imgPathSrc + '**/*'])
@@ -88,7 +96,7 @@ gulp.task('less', function(){
 		// 	"uglyComments": false
 		// }))
 		.pipe($.sourcemaps.write("./"))
-		.pipe(gulp.dest(dist))
+		.pipe(gulp.dest(config.cssPath))
 		.pipe(browserSync.stream());
 });
 
@@ -113,7 +121,7 @@ gulp.task('lessDone', function(){
 		// 	"maxLineLen": 80,
 		// 	"uglyComments": false
 		// }))
-		.pipe(gulp.dest(dist));
+		.pipe(gulp.dest(config.cssPath));
 });
 
 /* Compile Pug templates
@@ -285,6 +293,7 @@ gulp.task('commit', function(){
   	'copy',
   	'imagesDone',
   	'wp',
+  	'wp-gulp',
 	'uglify');
 });
 
@@ -298,5 +307,6 @@ gulp.task('done', function(){
   	'copy',
   	'imagesDoneWp',
   	'wp',
+  	'wp-gulp',
 	'uglify');
 });

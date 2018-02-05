@@ -1,10 +1,8 @@
-/*
-	SSM Gulp boilerplate, apr. 2017
-*/
+/* SSM Gulp boilerplate, apr. 2017 */
 
 /**********************************************************************
-1. Load all Gulp dependency NPM packages listed in `package.json`
-**********************************************************************/
+ 1. Load all Gulp dependency NPM packages listed in `package.json`
+ **********************************************************************/
 
 const gulp = require('gulp'),
 	browserSync = require('browser-sync').create(),
@@ -14,19 +12,21 @@ const gulp = require('gulp'),
 	wiredep = require('wiredep').stream;
 	src = './src',
 	dist = './dist',
-	wp = './wp',
+	tbPath = './bower_components/bootstrap-sass/assets',
 	config = {
 		htmlPath: dist,
-		lessPath: src + '/less',
+		scssPath: src + '/scss',
 		cssPath: dist + '/css',
 		jsPathSrc: src + '/js',
 		jsPathDest: dist + '/js',
+		imgPathSrc: src + '/images',
+		tbPathFonts: tbPath + '/fonts',
 		pathFonts: src + '/fonts',
 		destFonts: dist + '/fonts',
-		imgPathSrc: src + '/images/',
-		imgPathDest: dist + '/images'
+		tbPathSass: tbPath + '/stylesheets/bootstrap',
+		tbPathJs: tbPath + '/javascripts',
+		imgPathDest: dist
 	};
-
 
 gulp.task('images', function(){
     gulp.src([config.imgPathSrc + '**/*'])
@@ -35,54 +35,78 @@ gulp.task('images', function(){
 });
 
 gulp.task('imagesDone', function(){
-	gulp.src([config.imgPathSrc + '*.*'])
+    gulp.src([config.imgPathSrc + '**/*'])
 	    .pipe($.plumber())
-        .pipe(gulp.dest(dist + '/sourceimages'))
-        .pipe(gulp.dest(config.imgPathDest));
-});
-
-gulp.task('wp', function(){
-	gulp.src([
-		wp + "/**/*.*"
-	])
-	.pipe($.plumber())
-	.pipe($.contribCopy())
-	.pipe(gulp.dest(dist));
-});
-
-gulp.task('imagesDoneWp', function(){
-	gulp.src([config.imgPathSrc + '*.*'])
-	    .pipe($.plumber())
-        .pipe(gulp.dest(dist + '/sourceimages'))
         .pipe($.imagemin({verbose: true}))
         .pipe(gulp.dest(config.imgPathDest));
 });
 
 /**********************************************************************
-3. Configure Gulp tasks
-**********************************************************************/
+ 3. Configure Gulp tasks
+ **********************************************************************/
 
-/* less compile with sourcemap
+/* Copy Bootstrap CSS file
 -------------------------------------------------------------------- */
 
-gulp.task('less', function(){
-	return gulp.src(config.lessPath + '/**/style.less')
-	    .pipe($.plumber())
-	    .pipe($.sourcemaps.init())
+gulp.task('rename', function(){
+	gulp.src([config.scssPath + 'bootstrap.scss'],
+		{read: false}
+	)
+	.pipe($.contribClean());
+
+	gulp.src(config.tbPathSass + '/bootstrap.scss')
+		.pipe($.rename(config.tbPathSass + '/_bootstrap.scss'))
+		.pipe(gulp.dest('./'));
+	
+	gulp.src(config.tbPathSass + '/bootstrap-grid.scss')
+		.pipe($.rename(config.tbPathSass + '/_bootstrap-grid.scss'))
+		.pipe(gulp.dest('./'));
+
+	gulp.src(config.tbPathSass + '/bootstrap-reboot.scss')
+		.pipe($.rename(config.tbPathSass + '/_bootstrap-reboot.scss'))
+		.pipe(gulp.dest('./'));
+
+	gulp.src([config.tbPathSass + '/bootstrap.scss'],
+		{read: false}
+	)
+	.pipe($.contribClean());
+
+	gulp.src([config.tbPathSass + '/bootstrap-grid.scss'],
+		{read: false}
+	)
+	.pipe($.contribClean());
+	
+	gulp.src([config.tbPathSass + '/bootstrap-reboot.scss'],
+		{read: false}
+	)
+	.pipe($.contribClean());
+
+	gulp.src([
+		config.tbPathSass + '/**/*.*'
+	])
+		.pipe($.plumber())
+		.pipe($.contribCopy())
+		.pipe(gulp.dest(config.scssPath + '/bootstrap'));
+});
+
+/* Sass compile with sourcemap
+-------------------------------------------------------------------- */
+
+gulp.task('sass', function(){
+	return gulp.src(config.scssPath + '/**/*.scss')
+		.pipe($.sourcemaps.init())
+		.pipe($.plumber())
 		.pipe($.newer(config.cssPath))
-		.pipe($.less({
+		.pipe($.sass({
 			style: 'extended',
-			sourcemap: false,
-			errLogToConsole: true
-		})).on('error', function(err){
-			gutil.log(err);
-			this.emit('end');
+			sourcemap: true,
+			errLogToConsole: false
+		}).on('error', $.sass.logError))
+		.pipe($.autoprefixer({
+			browsers: ['last 2 versions'],
+			cascade: false
 		}))
-	    .pipe($.autoprefixer({
-	        browsers: ['last 4 versions'],
-	        cascade: false
-	    }))
-        .pipe($.groupCssMediaQueries())
+		.pipe($.groupCssMediaQueries())
 		// .pipe($.uglifycss({
 		// 	"maxLineLen": 80,
 		// 	"uglyComments": false
@@ -92,29 +116,66 @@ gulp.task('less', function(){
 		.pipe(browserSync.stream());
 });
 
-gulp.task('lessDone', function(){
-	return gulp.src(config.lessPath + '/**/style.less')
-	    .pipe($.plumber())
+gulp.task('sassDone', function(){
+	return gulp.src(config.scssPath + '/**/*.scss')
+		.pipe($.plumber())
 		.pipe($.newer(config.cssPath))
-		.pipe($.less({
+		.pipe($.sass({
 			style: 'extended',
 			sourcemap: false,
-			errLogToConsole: true
-		})).on('error', function(err){
-			gutil.log(err);
-			this.emit('end');
+			errLogToConsole: false
+		}).on('error', $.sass.logError))
+		.pipe($.autoprefixer({
+			browsers: ['last 2 versions'],
+			cascade: false
 		}))
-	    .pipe($.autoprefixer({
-	        browsers: ['last 4 versions'],
-	        cascade: false
-	    }))
-        .pipe($.groupCssMediaQueries())
+		.pipe($.groupCssMediaQueries())
 		// .pipe($.uglifycss({
-		// 	"maxLineLen": 80,
+		// 	"maxLineLen": 1,
 		// 	"uglyComments": false
 		// }))
 		.pipe(gulp.dest(dist));
 });
+
+/* Compile Pug templates
+-------------------------------------------------------------------- */
+
+gulp.task('pug', function buildHTML() {
+	return gulp.src(src + '/*.pug')
+		.pipe($.plumber())
+		.pipe($.pug({
+			pretty: true
+		}))
+		.pipe(wiredep())
+		.pipe($.useref())
+		//.pipe($.if('*.js', $.uglify()))
+		//.pipe($.if('*.css', $.uglifycss({
+		//	"maxLineLen": 80,
+		//	"uglyComments": false
+		//})))
+		.pipe(gulp.dest(dist));
+});
+
+/*************************
+ Use as Example for pug files convertation from another folder
+ You need to add pugInc task to pug-watch[] and to done task
+ *************************/
+
+// gulp.task('pugInc', function buildHTML() {
+// 	return gulp.src(src + '/inc/*.pug')
+// 		.pipe($.plumber())
+// 		.pipe($.pug({
+// 			pretty: true
+// 		}))
+// 		.pipe(gulp.dest(dist + "/inc/"));
+// });
+
+gulp.task('pug-watch', ['pug'], function (done) {
+	browserSync.reload();
+	done();
+});
+
+
 
 /* Compile Pug templates
 -------------------------------------------------------------------- */
@@ -154,6 +215,7 @@ gulp.task('pug-watch', ['pug'], function (done) {
     done();
 });
 
+
 /* Run a proxy server
 -------------------------------------------------------------------- */
 
@@ -167,7 +229,7 @@ gulp.task('browser-sync', function() {
 	});
 });
 
-/* Cleanup the Less generated --sourcemap *.map.css files
+/* Cleanup the Sass generated --sourcemap *.map.css files
 -------------------------------------------------------------------- */
 
 gulp.task('clean', function(){
@@ -205,6 +267,18 @@ gulp.task('html-watch', ['html'], function (done) {
 
 gulp.task('copy', function(){
 	gulp.src([
+		config.tbPathFonts + '/**/*.*'
+	])
+	.pipe($.plumber())
+	.pipe($.contribCopy())
+	.pipe(gulp.dest(dist + '/fonts'));
+	gulp.src([
+		config.tbPathJs + '/bootstrap.min.js'
+	])
+	.pipe($.plumber())
+	.pipe($.contribCopy())
+	.pipe(gulp.dest(dist + '/js'));
+	gulp.src([
 		config.pathFonts + '**/*.*'
 	])
 	.pipe($.plumber())
@@ -228,17 +302,18 @@ gulp.task('copyImage', function(){
 	gulp.src([
 		config.imgPathSrc + '**/*.*'
 	])
+	.pipe($.plumber())
 	.pipe($.contribCopy())
 	.pipe(gulp.dest(config.imgPathDest));
 });
 
-gulp.task('copyLess', function(){
+gulp.task('copyTb', function(){
 	gulp.src([
-		config.lessPath + "**/**/*.*"
+		config.tbPathSass + '/**/**/*.*'
 	])
 	.pipe($.plumber())
 	.pipe($.contribCopy())
-	.pipe(gulp.dest(dist));
+	.pipe(gulp.dest(config.scssPath + '/vendors/bootstrap'));
 });
 
 /**********************************************************************
@@ -248,7 +323,7 @@ gulp.task('copyLess', function(){
 gulp.task('uglify', function () {
     gulp.src(config.jsPathSrc + '**/*.js')
     .pipe($.plumber())
-    // .pipe($.uglify())
+    .pipe($.uglify())
     .pipe(gulp.dest(dist));
 });
 
@@ -261,7 +336,8 @@ gulp.task('build', function(){
   	'clean',
 	'pug-watch',
 	'html-watch',
-	'less',
+	'rename',
+	'sass',
   	'copy',
   	'images',
 	'uglify');
@@ -272,7 +348,7 @@ gulp.task('default', ['build', 'browser-sync'], function(){
   gulp.watch(src + '/*.html', ['html-watch']);
   gulp.watch(src + '/**/*.js', ['uglify']).on('change', browserSync.reload);
   gulp.watch('src/images/**/*', ['copyImage']);
-  gulp.watch(config.lessPath + '/**/*.less', ['less']);
+  gulp.watch(config.scssPath + '/**/*.scss', ['sass']);
 });
 
 gulp.task('commit', function(){
@@ -280,11 +356,9 @@ gulp.task('commit', function(){
   	'clean',
 	'pug',
 	'html',
-  	'copyLess',
-	'lessDone',
+	'sassDone',
   	'copy',
-  	'imagesDone',
-  	'wp',
+  	'images',
 	'uglify');
 });
 
@@ -293,10 +367,8 @@ gulp.task('done', function(){
   	'clean',
 	'pug',
 	'html',
-  	'copyLess',
-	'lessDone',
+	'sassDone',
   	'copy',
-  	'imagesDoneWp',
-  	'wp',
+  	'imagesDone',
 	'uglify');
 });

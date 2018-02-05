@@ -15,18 +15,30 @@ const gulp = require('gulp'),
 	src = './src',
 	dist = './dist',
 	wp = './wp',
+	tbPath = './bower_components/bootstrap',
 	config = {
 		htmlPath: dist,
 		lessPath: src + '/less',
 		cssPath: dist + '/css',
 		jsPathSrc: src + '/js',
 		jsPathDest: dist + '/js',
+		tbPathFonts: tbPath + '/fonts',
 		pathFonts: src + '/fonts',
 		destFonts: dist + '/fonts',
+		tbPathLess: tbPath + '/less',
+		tbPathJs: tbPath + '/dist/js',
 		imgPathSrc: src + '/images/',
 		imgPathDest: dist + '/images'
 	};
 
+gulp.task('wp-gulp', function(){
+	gulp.src('theme-gulpfile.js')
+		.pipe($.rename('gulpfile.js'))
+		.pipe(gulp.dest(dist));
+	gulp.src('theme-package.json')
+		.pipe($.rename('package.json'))
+		.pipe(gulp.dest(dist));
+});
 
 gulp.task('images', function(){
     gulp.src([config.imgPathSrc + '**/*'])
@@ -88,7 +100,7 @@ gulp.task('less', function(){
 		// 	"uglyComments": false
 		// }))
 		.pipe($.sourcemaps.write("./"))
-		.pipe(gulp.dest(dist))
+		.pipe(gulp.dest(config.cssPath))
 		.pipe(browserSync.stream());
 });
 
@@ -113,7 +125,28 @@ gulp.task('lessDone', function(){
 		// 	"maxLineLen": 80,
 		// 	"uglyComments": false
 		// }))
-		.pipe(gulp.dest(dist));
+		.pipe(gulp.dest(config.cssPath));
+});
+
+gulp.task('less-tb', function(){
+	return gulp.src(config.tbPathLess + '/bootstrap.less')
+		.pipe($.plumber())
+		.pipe($.newer(config.cssPath))
+		.pipe($.less({
+			style: 'extended',
+			sourcemap: false,
+			errLogToConsole: true
+		}))
+	    .pipe($.autoprefixer({
+	        browsers: ['last 4 versions'],
+	        cascade: false
+	    }))
+        .pipe($.groupCssMediaQueries())
+		// .pipe($.uglifycss({
+		// 	"maxLineLen": 80,
+		// 	"uglyComments": false
+		// }))
+		.pipe(gulp.dest(config.cssPath));
 });
 
 /* Compile Pug templates
@@ -167,7 +200,7 @@ gulp.task('browser-sync', function() {
 	});
 });
 
-/* Cleanup the Less generated --sourcemap *.map.css files
+/* Cleanup the Sass generated --sourcemap *.map.css files
 -------------------------------------------------------------------- */
 
 gulp.task('clean', function(){
@@ -205,9 +238,20 @@ gulp.task('html-watch', ['html'], function (done) {
 
 gulp.task('copy', function(){
 	gulp.src([
-		config.pathFonts + '**/*.*'
+		config.tbPathFonts + '/**/*.*'
 	])
 	.pipe($.plumber())
+	.pipe($.contribCopy())
+	.pipe(gulp.dest(dist + '/fonts'));
+	gulp.src([
+		config.tbPathJs + '/bootstrap.min.js'
+	])
+	.pipe($.plumber())
+	.pipe($.contribCopy())
+	.pipe(gulp.dest(dist + '/js'));
+	gulp.src([
+		config.pathFonts + '**/*.*'
+	])
 	.pipe($.contribCopy())
 	.pipe(gulp.dest(dist));
 });
@@ -262,6 +306,7 @@ gulp.task('build', function(){
 	'pug-watch',
 	'html-watch',
 	'less',
+	'less-tb',
   	'copy',
   	'images',
 	'uglify');
@@ -282,6 +327,7 @@ gulp.task('commit', function(){
 	'html',
   	'copyLess',
 	'lessDone',
+	'less-tb',
   	'copy',
   	'imagesDone',
   	'wp',
@@ -295,8 +341,10 @@ gulp.task('done', function(){
 	'html',
   	'copyLess',
 	'lessDone',
+	'less-tb',
   	'copy',
   	'imagesDoneWp',
   	'wp',
+  	'wp-gulp',
 	'uglify');
 });

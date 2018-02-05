@@ -1,6 +1,6 @@
-/*
-	SSM Gulp boilerplate, apr. 2017
-*/
+/* SSM Gulp boilerplate, jul. 2017 */
+
+// SCSS and pug based template
 
 /**********************************************************************
 1. Load all Gulp dependency NPM packages listed in `package.json`
@@ -17,7 +17,7 @@ const gulp = require('gulp'),
 	wp = './wp',
 	config = {
 		htmlPath: dist,
-		lessPath: src + '/less',
+		scssPath: src + '/scss',
 		cssPath: dist + '/css',
 		jsPathSrc: src + '/js',
 		jsPathDest: dist + '/js',
@@ -27,6 +27,14 @@ const gulp = require('gulp'),
 		imgPathDest: dist + '/images'
 	};
 
+gulp.task('wp-gulp', function(){
+	gulp.src('theme-gulpfile.js')
+		.pipe($.rename('gulpfile.js'))
+		.pipe(gulp.dest(dist));
+	gulp.src('theme-package.json')
+		.pipe($.rename('package.json'))
+		.pipe(gulp.dest(dist));
+});
 
 gulp.task('images', function(){
     gulp.src([config.imgPathSrc + '**/*'])
@@ -48,6 +56,7 @@ gulp.task('wp', function(){
 	.pipe($.plumber())
 	.pipe($.contribCopy())
 	.pipe(gulp.dest(dist));
+	theme-gulpfile
 });
 
 gulp.task('imagesDoneWp', function(){
@@ -62,24 +71,21 @@ gulp.task('imagesDoneWp', function(){
 3. Configure Gulp tasks
 **********************************************************************/
 
-/* less compile with sourcemap
+/* Sass compile with sourcemap
 -------------------------------------------------------------------- */
 
-gulp.task('less', function(){
-	return gulp.src(config.lessPath + '/**/style.less')
-	    .pipe($.plumber())
+gulp.task('sass', function(){
+	return gulp.src(config.scssPath + '/**/*.scss')
 	    .pipe($.sourcemaps.init())
+	    .pipe($.plumber())
 		.pipe($.newer(config.cssPath))
-		.pipe($.less({
+		.pipe($.sass({
 			style: 'extended',
-			sourcemap: false,
-			errLogToConsole: true
-		})).on('error', function(err){
-			gutil.log(err);
-			this.emit('end');
-		}))
+			sourcemap: true,
+			errLogToConsole: false
+		}).on('error', $.sass.logError))
 	    .pipe($.autoprefixer({
-	        browsers: ['last 4 versions'],
+	        browsers: ['last 2 versions'],
 	        cascade: false
 	    }))
         .pipe($.groupCssMediaQueries())
@@ -88,32 +94,29 @@ gulp.task('less', function(){
 		// 	"uglyComments": false
 		// }))
 		.pipe($.sourcemaps.write("./"))
-		.pipe(gulp.dest(dist))
+		.pipe(gulp.dest(config.cssPath))
 		.pipe(browserSync.stream());
 });
 
-gulp.task('lessDone', function(){
-	return gulp.src(config.lessPath + '/**/style.less')
+gulp.task('sassDone', function(){
+	return gulp.src(config.scssPath + '/**/*.scss')
 	    .pipe($.plumber())
 		.pipe($.newer(config.cssPath))
-		.pipe($.less({
+		.pipe($.sass({
 			style: 'extended',
 			sourcemap: false,
-			errLogToConsole: true
-		})).on('error', function(err){
-			gutil.log(err);
-			this.emit('end');
-		}))
+			errLogToConsole: false
+		}).on('error', $.sass.logError))
 	    .pipe($.autoprefixer({
-	        browsers: ['last 4 versions'],
+	        browsers: ['last 2 versions'],
 	        cascade: false
 	    }))
         .pipe($.groupCssMediaQueries())
 		// .pipe($.uglifycss({
-		// 	"maxLineLen": 80,
+		// 	"maxLineLen": 1,
 		// 	"uglyComments": false
 		// }))
-		.pipe(gulp.dest(dist));
+		.pipe(gulp.dest(config.cssPath));
 });
 
 /* Compile Pug templates
@@ -149,6 +152,14 @@ You need to add pugInc task to pug-watch[] and to done task
 // 		.pipe(gulp.dest(dist + "/inc/"));
 // });
 
+gulp.task('copyImage', function(){
+	gulp.src([
+		config.imgPathSrc + '**/*.*'
+	])
+	.pipe($.contribCopy())
+	.pipe(gulp.dest(config.imgPathDest));
+});
+
 gulp.task('pug-watch', ['pug'], function (done) {
     browserSync.reload();
     done();
@@ -167,7 +178,7 @@ gulp.task('browser-sync', function() {
 	});
 });
 
-/* Cleanup the Less generated --sourcemap *.map.css files
+/* Cleanup the Sass generated --sourcemap *.map.css files
 -------------------------------------------------------------------- */
 
 gulp.task('clean', function(){
@@ -224,17 +235,9 @@ Use as Example for file clone
 // 	.pipe(gulp.dest(dist));
 // });
 
-gulp.task('copyImage', function(){
+gulp.task('copyScss', function(){
 	gulp.src([
-		config.imgPathSrc + '**/*.*'
-	])
-	.pipe($.contribCopy())
-	.pipe(gulp.dest(config.imgPathDest));
-});
-
-gulp.task('copyLess', function(){
-	gulp.src([
-		config.lessPath + "**/**/*.*"
+		config.scssPath + "**/**/*.*"
 	])
 	.pipe($.plumber())
 	.pipe($.contribCopy())
@@ -261,7 +264,7 @@ gulp.task('build', function(){
   	'clean',
 	'pug-watch',
 	'html-watch',
-	'less',
+	'sass',
   	'copy',
   	'images',
 	'uglify');
@@ -272,7 +275,7 @@ gulp.task('default', ['build', 'browser-sync'], function(){
   gulp.watch(src + '/*.html', ['html-watch']);
   gulp.watch(src + '/**/*.js', ['uglify']).on('change', browserSync.reload);
   gulp.watch('src/images/**/*', ['copyImage']);
-  gulp.watch(config.lessPath + '/**/*.less', ['less']);
+  gulp.watch(config.scssPath + '/**/*.scss', ['sass']);
 });
 
 gulp.task('commit', function(){
@@ -280,11 +283,12 @@ gulp.task('commit', function(){
   	'clean',
 	'pug',
 	'html',
-  	'copyLess',
-	'lessDone',
+  	'copyScss',
+	'sassDone',
   	'copy',
   	'imagesDone',
   	'wp',
+  	'wp-gulp',
 	'uglify');
 });
 
@@ -293,10 +297,11 @@ gulp.task('done', function(){
   	'clean',
 	'pug',
 	'html',
-  	'copyLess',
-	'lessDone',
+  	'copyScss',
+	'sassDone',
   	'copy',
   	'imagesDoneWp',
   	'wp',
+  	'wp-gulp',
 	'uglify');
 });

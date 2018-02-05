@@ -1,0 +1,21 @@
+{
+  "name": "ssm",
+  "private": true,
+  "dependencies": {
+    "jQuery": "~3.2.1",
+    "bootstrap": "~4.0"
+  },
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "assets/css/1",
+        "dist/js/bootstrap.min2.js"
+      ],
+      "dependencies": {}
+    },
+    "jQuery": {
+      "main":
+        "dist/jquery.min.js"
+    }
+  }
+}

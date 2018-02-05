@@ -14,11 +14,12 @@ const gulp = require('gulp'),
 	wiredep = require('wiredep').stream;
 	src = './src',
 	dist = './dist',
+	wp = './wp',
 	tbPath = './bower_components/bootstrap',
 	config = {
 		htmlPath: dist,
 		lessPath: src + '/less',
-		cssPath: dist + '/css',
+		cssPath: dist,
 		jsPathSrc: src + '/js',
 		jsPathDest: dist + '/js',
 		tbPathFonts: tbPath + '/fonts',
@@ -91,7 +92,7 @@ gulp.task('less', function(){
 		// 	"uglyComments": false
 		// }))
 		.pipe($.sourcemaps.write("./"))
-		.pipe(gulp.dest(config.cssPath))
+		.pipe(gulp.dest(dist))
 		.pipe(browserSync.stream());
 });
 

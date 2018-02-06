@@ -56,7 +56,6 @@ gulp.task('wp', function(){
 	.pipe($.plumber())
 	.pipe($.contribCopy())
 	.pipe(gulp.dest(dist));
-	theme-gulpfile
 });
 
 gulp.task('imagesDoneWp', function(){

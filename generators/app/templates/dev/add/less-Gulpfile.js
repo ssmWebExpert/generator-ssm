@@ -14,7 +14,6 @@ const gulp = require('gulp'),
 	wiredep = require('wiredep').stream;
 	src = './src',
 	dist = './dist',
-	wp = './wp',
 	config = {
 		htmlPath: dist,
 		lessPath: src + '/less',
@@ -47,15 +46,6 @@ gulp.task('imagesDone', function(){
 	    .pipe($.plumber())
         .pipe(gulp.dest(dist + '/sourceimages'))
         .pipe(gulp.dest(config.imgPathDest));
-});
-
-gulp.task('wp', function(){
-	gulp.src([
-		wp + "/**/*.*"
-	])
-	.pipe($.plumber())
-	.pipe($.contribCopy())
-	.pipe(gulp.dest(dist));
 });
 
 gulp.task('imagesDoneWp', function(){
@@ -292,7 +282,6 @@ gulp.task('commit', function(){
 	'lessDone',
   	'copy',
   	'imagesDone',
-  	'wp',
   	'wp-gulp',
 	'uglify');
 });
@@ -306,7 +295,6 @@ gulp.task('done', function(){
 	'lessDone',
   	'copy',
   	'imagesDoneWp',
-  	'wp',
   	'wp-gulp',
 	'uglify');
 });

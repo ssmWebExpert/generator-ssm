@@ -21,17 +21,34 @@ Then generate your new project:
 ```bash
 yo ssm
 ```
+========
 
-After that you need to start gulp bat/app to enter workflow catalogue or make it using console:
+Next you only need to start gulp bat/app to enter workflow catalogue or make it using console:
 
 ```bash
 cd markup
-gulp serve
+gulp
+```
+========
+
+Before commit you have to use command 
+
+```bash
+gulp commit
 ```
 
- If you've find some issues - please contact me:
+it will finish your work on files, and only image min wont run to make fask commit
 
- saintick.mail@gmail.com - email
+=========
+
+After project is Done use command
+
+```bash
+gulp done
+```
+
+
+ If you've find some issues - please contact me:
 
  deadkedbl2 - skype
 

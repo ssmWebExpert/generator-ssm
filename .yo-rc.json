@@ -1,0 +1,9 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "SSM",
+      "authorEmail": "saintick.mail@gmail.com",
+      "authorUrl": ""
+    }
+  }
+}

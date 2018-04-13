@@ -75,7 +75,7 @@ gulp.task('build', function(){
 });
 
 gulp.task('default', ['build', 'browser-sync'], function(){
-  gulp.watch('images/**/*', ['images']);
+  gulp.watch('sourceimages/**/*', ['images']);
   gulp.watch(config.scssPath + '/**/*.scss', ['sass']);
 });
 

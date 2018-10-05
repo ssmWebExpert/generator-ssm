@@ -17,6 +17,7 @@ body {
 }
 
 // adaptive images
+
 img {
 	max-width: 100%;
 	height: auto;
@@ -33,6 +34,7 @@ video, iframe, object, embed {
 }
 
 // google map fix
+
 .gm-style img {max-width: none}
 
 blockquote, blockquote:before, blockquote:after, q, q:before, q:after {quotes: none;}
@@ -43,34 +45,62 @@ blockquote:before, blockquote:after, q:before, q:after {content: '';}
 }
 
 // lists
-// ul {
-// 	@extend %listreset;
-// }
-// 
-// ul ul,
-// ul ol,
-// ol ul,
-// ol ol {
-// 	padding-left:3em;
-// 	margin:0;
-// }
-// 
-// ul:not([class]) {
-// 	padding: 0 0 10px;
-// 
-// 	li {
-// 		position: relative;
-// 		padding: 0 0 10px 15px;
-// 
-// 		&:before {
-// 			content: '';
-// 			background: $base-text-color;
-// 			width: 9px;
-// 			height: 9px;
-// 			position: absolute;
-// 			left: 0;
-// 			top: 8px;
-// 			border-radius: 50%;
-// 		}
-// 	}
-// }
+
+ul,
+ol {
+	@extend %listreset;
+}
+
+ol {
+	counter-reset: item;
+	padding: 0 0 10px;
+	
+	li {
+
+		&:before {
+			content: counter(item)'.';
+			counter-increment: item;
+			display: inline-block;
+			vertical-align: top;
+			margin: 0 3px 0 0;
+		}
+	}
+	
+	ol {
+
+		li {
+
+			&:before {
+				content: counter(item, lower-latin)'.';
+			}
+		}
+	}
+}
+
+ul ul,
+ul ol,
+ol ul,
+ol ol {
+	padding-left: 30px;
+	margin: 0;
+}
+
+ul:not([class]) {
+	padding: 0 0 10px;
+
+	li {
+		position: relative;
+		padding: 0 0 10px 15px;
+
+		&:before {
+			content: '';
+			background: $base-text-color;
+			width: 9px;
+			height: 9px;
+			position: absolute;
+			left: 0;
+			top: 8px;
+			border-radius: 50%;
+		}
+	}
+}

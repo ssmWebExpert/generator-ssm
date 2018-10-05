@@ -28,14 +28,22 @@ const gulp = require('gulp'),
 		imgPathDest: dist
 	};
 
+
 gulp.task('images', function(){
-    gulp.src([config.imgPathSrc + '**/*'])
+    gulp.src([config.imgPathSrc + '**/*.png'])
+	    .pipe($.plumber())
+        .pipe(gulp.dest(config.imgPathDest));
+    gulp.src([config.imgPathSrc + '**/*.jpg'])
 	    .pipe($.plumber())
         .pipe(gulp.dest(config.imgPathDest));
 });
 
 gulp.task('imagesDone', function(){
-    gulp.src([config.imgPathSrc + '**/*'])
+    gulp.src([config.imgPathSrc + '**/*.png'])
+	    .pipe($.plumber())
+        .pipe($.imagemin({verbose: true}))
+        .pipe(gulp.dest(config.imgPathDest));
+    gulp.src([config.imgPathSrc + '**/*.jpg'])
 	    .pipe($.plumber())
         .pipe($.imagemin({verbose: true}))
         .pipe(gulp.dest(config.imgPathDest));
@@ -278,12 +286,14 @@ gulp.task('copy', function(){
 	.pipe($.plumber())
 	.pipe($.contribCopy())
 	.pipe(gulp.dest(dist + '/js'));
-	gulp.src([
-		config.pathFonts + '**/*.*'
-	])
-	.pipe($.plumber())
-	.pipe($.contribCopy())
-	.pipe(gulp.dest(dist));
+	gulp.src([config.pathFonts + '**/*.*'])
+		.pipe($.plumber())
+		.pipe($.contribCopy())
+		.pipe(gulp.dest(dist));
+	gulp.src([config.imgPathSrc + '**/*.svg'])
+		.pipe($.plumber())
+		.pipe($.contribCopy())
+		.pipe(gulp.dest(config.imgPathDest));
 });
 
 /*************************
@@ -358,7 +368,7 @@ gulp.task('commit', function(){
 	'html',
 	'sassDone',
   	'copy',
-  	'images',
+  	'imagesDone',
 	'uglify');
 });
 

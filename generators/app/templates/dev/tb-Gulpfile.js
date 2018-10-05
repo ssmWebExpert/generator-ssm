@@ -29,13 +29,20 @@ const gulp = require('gulp'),
 	};
 
 gulp.task('images', function(){
-    gulp.src([config.imgPathSrc + '**/*'])
+    gulp.src([config.imgPathSrc + '**/*.png'])
+	    .pipe($.plumber())
+        .pipe(gulp.dest(config.imgPathDest));
+    gulp.src([config.imgPathSrc + '**/*.jpg'])
 	    .pipe($.plumber())
         .pipe(gulp.dest(config.imgPathDest));
 });
 
 gulp.task('imagesDone', function(){
-    gulp.src([config.imgPathSrc + '**/*'])
+    gulp.src([config.imgPathSrc + '**/*.png'])
+	    .pipe($.plumber())
+        .pipe($.imagemin({verbose: true}))
+        .pipe(gulp.dest(config.imgPathDest));
+    gulp.src([config.imgPathSrc + '**/*.jpg'])
 	    .pipe($.plumber())
         .pipe($.imagemin({verbose: true}))
         .pipe(gulp.dest(config.imgPathDest));
@@ -200,6 +207,10 @@ gulp.task('copy', function(){
 	.pipe($.plumber())
 	.pipe($.contribCopy())
 	.pipe(gulp.dest(dist));
+	gulp.src([config.imgPathSrc + '**/*.svg'])
+		.pipe($.plumber())
+		.pipe($.contribCopy())
+		.pipe(gulp.dest(config.imgPathDest));
 });
 
 /*************************
@@ -275,7 +286,7 @@ gulp.task('commit', function(){
 	'sassDone',
 	'copyTb',
   	'copy',
-  	'images',
+  	'imagesDone',
 	'uglify');
 });
 

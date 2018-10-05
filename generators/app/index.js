@@ -99,7 +99,7 @@ module.exports = class extends Generator {
       );
       this.fs.copy(
         this.templatePath('dev/gitignore'),
-        this.destinationPath(this.data.appName + '/.gitignore')
+        this.destinationPath(this.data.appName + '/markup/.gitignore')
       );
       this.fs.copy(
         this.templatePath('dev/head.pug'),

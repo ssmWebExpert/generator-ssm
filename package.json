@@ -1,6 +1,6 @@
 {
   "name": "generator-ssm",
-  "version": "1.4.4",
+  "version": "1.4.51",
   "description": "pug sass generator with all we need modules (less out of date)",
   "homepage": "",
   "author": {
@@ -40,7 +40,6 @@
     "testEnvironment": "node"
   },
   "scripts": {
-    "prepublish": "nsp check",
     "pretest": "eslint . --fix",
     "test": "jest"
   },

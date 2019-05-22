@@ -58,10 +58,6 @@ module.exports = class extends Generator {
           name: 'Bootstrap4',
           value: 'bootstrap4',
           checked : false
-        }, {
-          name: 'Bootstrap3 Less',
-          value: 'bootstrap3-less',
-          checked : false
         }]
       }];
 

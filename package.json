@@ -1,6 +1,6 @@
 {
   "name": "generator-ssm",
-  "version": "1.4.52",
+  "version": "1.4.53",
   "description": "pug sass generator with all we need modules (less out of date)",
   "homepage": "",
   "author": {
@@ -17,7 +17,6 @@
     "scss",
     "bootstrap-sass",
     "bootstrap",
-    "less",
     "ssm",
     "yeoman-generator"
   ],

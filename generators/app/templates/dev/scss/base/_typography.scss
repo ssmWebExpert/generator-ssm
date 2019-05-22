@@ -9,7 +9,7 @@ h6, .h6,
 .h {
 	font-family: $headings-font-family;
 	font-weight: bold;
-	margin: 0 0 0.5em;
+	margin: 0 0 15px;
 	color: $headings-color;
 }
 
@@ -38,15 +38,17 @@ h6, .h6 {
 }
 
 p {
-	margin: 0 0 1em;
+	margin: 0 0 20px;
 }
 
 a {
 	color: $base-link-color;
-	transition: color 0.3s;
+	transition: color .3s, background .3s, border .3s;
+	text-decoration: none;
+	outline: none;
 	
 	&:hover {
-		text-decoration: none;
 		color: $base-link-hover-color;
+		text-decoration: none;
 	}
 }

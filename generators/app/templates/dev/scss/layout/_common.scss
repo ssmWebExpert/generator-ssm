@@ -7,7 +7,33 @@
 .container-wrap {
 	@extend %clearfix;
 	max-width: $max-container-width;
-	padding: 0 $trim;
+	padding: 0 $trim-big;
 	margin: 0 auto;
 	width: 100%;
+
+	@include media("<desktop") {
+		padding: 0 $trim-middle;
+	}
+
+	@include media("<tablet") {
+		padding: 0 $trim;
+	}
+}
+
+.btn {
+	display: inline-block;
+	vertical-align: top;
+	text-decoration: none;
+	color: $btn-color;
+	background: $btn-background;
+	border: none;
+	min-width: 200px;
+	text-align: center;
+	padding: $btn-padding;
+	margin: 0;
+	
+	&:hover {
+		color: $btn-color-hover;
+		background: $btn-background-hover;
+	}
 }

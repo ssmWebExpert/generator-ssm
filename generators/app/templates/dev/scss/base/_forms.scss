@@ -25,7 +25,7 @@ textarea {
 	display: block;
 	background: $form-element-background;
 	border: 1px solid $form-element-border-color;
-	padding: $form-element-padding;
+	padding: 9px 10px;
 	font-size: 16px;
 	line-height: 20px;
 	height: 40px;
@@ -60,6 +60,8 @@ input[type='button'],
 input[type='reset'],
 input[type='file'],
 input[type='submit'] {
+	outline: none;
+	transition: color .3s, background .3s, border .3s;
 	-webkit-appearance: none;
 	-webkit-border-radius: 0;
 	cursor: pointer;

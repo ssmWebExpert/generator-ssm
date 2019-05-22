@@ -13,7 +13,7 @@ module.exports = class extends Generator {
       this.log(yosay('Yo! Welcome to the humble ' + chalk.blue.bold('SSM') + ' generator!'));
       this.sourceRoot(path.join(__dirname, 'templates'));
       this.data = {
-        appName: path.basename("markup"),
+        appName: path.basename("project_name"),
       };
     };
 
@@ -25,19 +25,6 @@ module.exports = class extends Generator {
         name: 'appName',
         message: 'What is the folder you want to create?',
         default: this.data.appName
-      },{
-        type: 'list',
-        name: 'OperationSystem',
-        message: 'Operation System?',
-        choices: [{
-          name: 'Mac Operation System',
-          value: 'IOs',
-          checked : true
-        }, {
-          name: 'Windows',
-          value: 'Windows',
-          checked : false
-        }]
       },{
         type: 'list',
         name: 'platform',
@@ -75,16 +62,11 @@ module.exports = class extends Generator {
           name: 'Bootstrap3 Less',
           value: 'bootstrap3-less',
           checked : false
-        }, {
-          name: 'Less',
-          value: 'less',
-          checked : false
         }]
       }];
 
       this.prompt(prompts).then(function(answers) {
         this.data.appName = answers.appName;
-        this.data.platform = answers.platform;
         this.data.framework = answers.framework;
         this.data.operationSystem = answers.OperationSystem;
 
@@ -105,18 +87,6 @@ module.exports = class extends Generator {
         this.templatePath('dev/head.pug'),
         this.destinationPath(this.data.appName + '/markup/src/pug/includes/styles.pug')
       );
-      if(this.data.operationSystem == 'IOs') {
-        this.fs.copy(
-          this.templatePath('dev/gulp-start.app'),
-          this.destinationPath(this.data.appName + '/gulp.app')
-        );
-      }
-      else {
-        this.fs.copy(
-          this.templatePath('dev/gulp.bat'),
-          this.destinationPath(this.data.appName + '/gulp.bat')
-        );
-      };
       if(this.data.platform == 'Markup Only') {
         if(this.data.framework == "sass") {
           this.fs.copy(
@@ -535,3 +505,9 @@ module.exports = class extends Generator {
       });
     };
 };
+
+// , {
+//   name: 'Less',
+//   value: 'less',
+//   checked : false
+// }

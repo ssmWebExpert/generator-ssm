@@ -214,13 +214,13 @@ gulp.task('copy', function(){
 Use as Example for file clone
 *************************/
 
-// gulp.task('copyVideo', function(){
-// 	gulp.src([
-// 		src + 'video/*.*'
-// 	])
-// 	.pipe($.contribCopy())
-// 	.pipe(gulp.dest(dist));
-// });
+gulp.task('copyVideo', function(){
+	gulp.src([
+		src + '/video/*.*'
+	])
+	.pipe($.contribCopy())
+	.pipe(gulp.dest(dist + '/video/'));
+});
 
 gulp.task('copyImage', function(){
 	gulp.src([
@@ -262,6 +262,7 @@ gulp.task('build', function(){
 	'less',
   	'copy',
   	'images',
+	'copyVideo',
 	'uglify');
 });
 
@@ -283,6 +284,7 @@ gulp.task('commit', function(){
   	'copy',
   	'imagesDone',
   	'wp-gulp',
+	'copyVideo',
 	'uglify');
 });
 
@@ -296,5 +298,6 @@ gulp.task('done', function(){
   	'copy',
   	'imagesDoneWp',
   	'wp-gulp',
+	'copyVideo',
 	'uglify');
 });

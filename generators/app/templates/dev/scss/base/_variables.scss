@@ -32,7 +32,7 @@ $base-font-serif: 'Times New Roman', 'Times', 'Baskerville', 'Georgia', serif;
 // Body
 $base-text-color: $black !default;
 $base-background-color: $white !default;
-$font-size-base: 26px !default;
+$font-size-base: 16px !default;
 $line-height-base: 1.2 !default;
 $base-font-family: $base-font-sans-serif !default;
 
@@ -46,7 +46,7 @@ $trim-big: 30px;
 
 $base-min-width: 320px;
 $max-content-width: 1140px;
-$max-container-width: $trim + $max-content-width + $trim;
+$max-container-width: $trim-big + $max-content-width + $trim-big;
 
 // Links
 $base-link-color: $light-blue;
@@ -54,12 +54,13 @@ $base-link-hover-color: $black;
 
 // Buttons 
 $btn-color: $white !default;
+$btn-color-hover: $black !default;
 $btn-background: $black !default;
-$btn-padding: 0.4em 0.7em !default;
+$btn-background-hover: $white !default;
+$btn-padding: 8px 10px !default;
 $btn-font-size: inherit !default;
 
 // Forms
-$form-element-padding: 9px 10px !default;
 $form-element-background: $white !default;
 $form-element-border-color: $gray !default;
 $form-element-focus-border-color: $black !default;

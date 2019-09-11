@@ -64,7 +64,7 @@ module.exports = class extends Generator {
       this.prompt(prompts).then(function(answers) {
         this.data.appName = answers.appName;
         this.data.framework = answers.framework;
-        this.data.operationSystem = answers.OperationSystem;
+        this.data.platform = answers.platform;
 
         done();
       }.bind(this));

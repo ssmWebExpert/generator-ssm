@@ -102,24 +102,6 @@ module.exports = class extends Generator {
             this.destinationPath(this.data.appName + '/markup/src/scss')
           );
         }
-        else if(this.data.framework == "less") {
-          this.fs.copy(
-            this.templatePath('dev/less-gulpfile.js'),
-            this.destinationPath(this.data.appName + '/markup/gulpfile.js')
-          );
-          this.fs.copy(
-            this.templatePath('dev/less-package.json'),
-            this.destinationPath(this.data.appName + '/markup/package.json')
-          );
-          this.fs.copy(
-            this.templatePath('dev/bower.json'),
-            this.destinationPath(this.data.appName + '/markup/bower.json')
-          );
-          this.fs.copy(
-            this.templatePath('dev/less'),
-            this.destinationPath(this.data.appName + '/markup/src/less')
-          );
-        }
         else if(this.data.framework == 'bootstrap3') {
           this.fs.copy(
             this.templatePath('dev/tb-gulpfile.js'),
@@ -163,28 +145,6 @@ module.exports = class extends Generator {
             this.templatePath('dev/tb-head.pug'),
             this.destinationPath(this.data.appName + '/markup/src/pug/includes/styles.pug')
           );
-        }
-        else if(this.data.framework == 'bootstrap3-less') {
-          this.fs.copy(
-            this.templatePath('dev/tb-less-gulpfile.js'),
-            this.destinationPath(this.data.appName + '/markup/gulpfile.js')
-          );
-          this.fs.copy(
-            this.templatePath('dev/tb-less-package.json'),
-            this.destinationPath(this.data.appName + '/markup/package.json')
-          );
-          this.fs.copy(
-            this.templatePath('dev/tb-less-bower.json'),
-            this.destinationPath(this.data.appName + '/markup/bower.json')
-          );
-          this.fs.copy(
-            this.templatePath('dev/less'),
-            this.destinationPath(this.data.appName + '/markup/src/less')
-          );
-          this.fs.copy(
-            this.templatePath('dev/tb-head.pug'),
-            this.destinationPath(this.data.appName + '/markup/src/pug/includes/styles.pug')
-          );
         };
       }
       else if(this.data.platform == 'WP') {
@@ -212,36 +172,6 @@ module.exports = class extends Generator {
           this.fs.copy(
             this.templatePath('dev/scss'),
             this.destinationPath(this.data.appName + '/markup/src/scss')
-          );
-          this.fs.copy(
-            this.templatePath('dev/wp-head.pug'),
-            this.destinationPath(this.data.appName + '/markup/src/pug/includes/styles.pug')
-          );
-        }
-        else if(this.data.framework == "less") {
-          this.fs.copy(
-            this.templatePath('dev/wp/less-gulpfile.js'),
-            this.destinationPath(this.data.appName + '/markup/gulpfile.js')
-          );
-          this.fs.copy(
-            this.templatePath('dev/less-package.json'),
-            this.destinationPath(this.data.appName + '/markup/package.json')
-          );
-          this.fs.copy(
-            this.templatePath('dev/wp/theme-less-gulpfile.js'),
-            this.destinationPath(this.data.appName + '/markup/theme-gulpfile.js')
-          );
-          this.fs.copy(
-            this.templatePath('dev/less-package.json'),
-            this.destinationPath(this.data.appName + '/markup/theme-package.json')
-          );
-          this.fs.copy(
-            this.templatePath('dev/bower.json'),
-            this.destinationPath(this.data.appName + '/markup/bower.json')
-          );
-          this.fs.copy(
-            this.templatePath('dev/less'),
-            this.destinationPath(this.data.appName + '/markup/src/less')
           );
           this.fs.copy(
             this.templatePath('dev/wp-head.pug'),
@@ -307,36 +237,6 @@ module.exports = class extends Generator {
             this.templatePath('dev/tb-wp-head.pug'),
             this.destinationPath(this.data.appName + '/markup/src/pug/includes/styles.pug')
           );
-        }
-        else if(this.data.framework == 'bootstrap3-less') {
-          this.fs.copy(
-            this.templatePath('dev/wp/tb-less-gulpfile.js'),
-            this.destinationPath(this.data.appName + '/markup/gulpfile.js')
-          );
-          this.fs.copy(
-            this.templatePath('dev/tb-less-package.json'),
-            this.destinationPath(this.data.appName + '/markup/package.json')
-          );
-          this.fs.copy(
-            this.templatePath('dev/wp/theme-less-gulpfile.js'),
-            this.destinationPath(this.data.appName + '/markup/theme-gulpfile.js')
-          );
-          this.fs.copy(
-            this.templatePath('dev/less-package.json'),
-            this.destinationPath(this.data.appName + '/markup/theme-package.json')
-          );
-          this.fs.copy(
-            this.templatePath('dev/tb-less-bower.json'),
-            this.destinationPath(this.data.appName + '/markup/bower.json')
-          );
-          this.fs.copy(
-            this.templatePath('dev/less'),
-            this.destinationPath(this.data.appName + '/markup/src/less')
-          );
-          this.fs.copy(
-            this.templatePath('dev/tb-wp-head.pug'),
-            this.destinationPath(this.data.appName + '/markup/src/pug/includes/styles.pug')
-          );
         };
       }
       else {
@@ -364,36 +264,6 @@ module.exports = class extends Generator {
           this.fs.copy(
             this.templatePath('dev/scss'),
             this.destinationPath(this.data.appName + '/markup/src/scss')
-          );
-          this.fs.copy(
-            this.templatePath('dev/head.pug'),
-            this.destinationPath(this.data.appName + '/markup/src/pug/includes/styles.pug')
-          );
-        }
-        else if(this.data.framework == "less") {
-          this.fs.copy(
-            this.templatePath('dev/add/less-gulpfile.js'),
-            this.destinationPath(this.data.appName + '/markup/gulpfile.js')
-          );
-          this.fs.copy(
-            this.templatePath('dev/less-package.json'),
-            this.destinationPath(this.data.appName + '/markup/package.json')
-          );
-          this.fs.copy(
-            this.templatePath('dev/add/theme-less-gulpfile.js'),
-            this.destinationPath(this.data.appName + '/markup/theme-gulpfile.js')
-          );
-          this.fs.copy(
-            this.templatePath('dev/less-package.json'),
-            this.destinationPath(this.data.appName + '/markup/theme-package.json')
-          );
-          this.fs.copy(
-            this.templatePath('dev/bower.json'),
-            this.destinationPath(this.data.appName + '/markup/bower.json')
-          );
-          this.fs.copy(
-            this.templatePath('dev/less'),
-            this.destinationPath(this.data.appName + '/markup/src/less')
           );
           this.fs.copy(
             this.templatePath('dev/head.pug'),
@@ -459,36 +329,6 @@ module.exports = class extends Generator {
             this.templatePath('dev/tb-head.pug'),
             this.destinationPath(this.data.appName + '/markup/src/pug/includes/styles.pug')
           );
-        }
-        else if(this.data.framework == 'bootstrap3-less') {
-          this.fs.copy(
-            this.templatePath('dev/add/tb-less-gulpfile.js'),
-            this.destinationPath(this.data.appName + '/markup/gulpfile.js')
-          );
-          this.fs.copy(
-            this.templatePath('dev/tb-less-package.json'),
-            this.destinationPath(this.data.appName + '/markup/package.json')
-          );
-          this.fs.copy(
-            this.templatePath('dev/add/theme-less-gulpfile.js'),
-            this.destinationPath(this.data.appName + '/markup/theme-gulpfile.js')
-          );
-          this.fs.copy(
-            this.templatePath('dev/less-package.json'),
-            this.destinationPath(this.data.appName + '/markup/theme-package.json')
-          );
-          this.fs.copy(
-            this.templatePath('dev/tb-less-bower.json'),
-            this.destinationPath(this.data.appName + '/markup/bower.json')
-          );
-          this.fs.copy(
-            this.templatePath('dev/less'),
-            this.destinationPath(this.data.appName + '/markup/src/less')
-          );
-          this.fs.copy(
-            this.templatePath('dev/tb-head.pug'),
-            this.destinationPath(this.data.appName + '/markup/src/pug/includes/styles.pug')
-          );
         };
       }
     };
@@ -501,9 +341,3 @@ module.exports = class extends Generator {
       });
     };
 };
-
-// , {
-//   name: 'Less',
-//   value: 'less',
-//   checked : false
-// }

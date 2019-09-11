@@ -18,7 +18,7 @@ const gulp = require('gulp'),
 	config = {
 		htmlPath: dist,
 		scssPath: src + '/scss',
-		cssPath: dist + '/css',
+		cssPath: dist + '',
 		jsPathSrc: src + '/js',
 		jsPathDest: dist + '/js',
 		pathFonts: src + '/fonts',
